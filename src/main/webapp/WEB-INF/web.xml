@@ -4,17 +4,16 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 
-<!-- 	<display-name>puhchCard</display-name>
+	<display-name>puhchCard</display-name>
 
 	<servlet>
 		<servlet-name>punchCard</servlet-name>
-		Fully qualified name.
-		<servlet-class>com.skillstorm.data.punchCard</servlet-class>
+		<servlet-class>com.skillstorm.data.PunchCardServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>punchCard</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping> -->
-
+		<url-pattern>/api</url-pattern>
+	</servlet-mapping>
+ 
 </web-app>
