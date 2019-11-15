@@ -2,6 +2,9 @@
 # Edit at https://www.gitignore.io/?templates=eclipse
 
 ### Eclipse ###
+.DS_Store
+**/.DS_Store
+target
 .metadata
 bin/
 tmp/
