@@ -74,7 +74,6 @@ public class PunchCardServlet extends HttpServlet {
 	
 	public static Connection getConnection() throws SQLException {
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/time_sheet", "root", "password");
-
 		return connection;
 	}
 	
@@ -93,10 +92,8 @@ public class PunchCardServlet extends HttpServlet {
 
 		try {
 			connection = getConnection();
-			String sql = "select * from student";
-			
+			String sql = "select * from student";			
 			statement = connection.createStatement();
-			
 			result = statement.executeQuery(sql);
 			
 			while(result.next()) {
