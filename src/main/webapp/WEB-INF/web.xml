@@ -8,7 +8,7 @@
 
 	<servlet>
 		<servlet-name>punchCard</servlet-name>
-		<servlet-class>com.skillstorm.data.PunchCardServlet</servlet-class>
+		<servlet-class>com.skillstorm.data.PunchCardControllerServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
