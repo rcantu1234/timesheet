@@ -19,10 +19,8 @@ public class PunchCardServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PunchCardServlet punch = new PunchCardServlet();
-		
-		punch.getUsers(req, resp);
-		
+		PunchCardServlet punch = new PunchCardServlet();		
+		punch.getUsers(req, resp);		
 	}
 	
 	public List<User> getUsers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -30,7 +28,7 @@ public class PunchCardServlet extends HttpServlet {
 		
 		resp.setContentType("text/html");
 		
-		List<Student> listStudents = new LinkedList();
+		List<User> listUsers = new LinkedList<>();
 		Connection connection = null;
 		ResultSet result = null;
 		Statement statement = null;
@@ -44,27 +42,25 @@ public class PunchCardServlet extends HttpServlet {
 
 		try {
 			connection = getConnection();
-			String sql = "select * from student";
-			
+			String sql = "select * from user";
 			statement = connection.createStatement();
-			
 			result = statement.executeQuery(sql);
-			
-			
+					
 			while(result.next()) {
-				Student students = new Student(result.getInt(1), result.getString(2), result.getString(3), result.getString(4));
+				User users = new User(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5));
 				
-				listStudents.add(students);
+				listUsers.add(users);
 			}
 			out.println("<html>");
 			out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center =center>");
 			
-			for(Student list : listStudents) {
+			for(User list : listUsers) {
 				out.println("<tr>");
-				out.println("<td align=center>" + list.getId() + "</td>");
+				out.println("<td align=center>" + list.getUserId() + "</td>");
 				out.println("<td align=center>" + list.getFirstName() + "</td>");
 				out.println("<td align=center>" + list.getLastName() + "</td>");
-				out.println("<td align=center>" + list.getEmail()+ "</td>");
+				out.println("<td align=center>" + list.getUserName()+ "</td>");
+				out.println("<td align=center>" + list.getPassword()+ "</td>");
 				out.println("</tr>");
 			}
 			out.println("</table>");
@@ -73,11 +69,11 @@ public class PunchCardServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return listUsers;
 	}
 	
 	public static Connection getConnection() throws SQLException {
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/web_student_tracker", "root", "password");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/time_sheet", "root", "password");
 
 		return connection;
 	}
