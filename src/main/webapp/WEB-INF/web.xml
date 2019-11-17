@@ -6,6 +6,10 @@
 
 	<display-name>puhchCard</display-name>
 
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
 	<servlet>
 		<servlet-name>punchCard</servlet-name>
 		<servlet-class>com.skillstorm.data.PunchCardControllerServlet</servlet-class>
@@ -13,7 +17,7 @@
 
 	<servlet-mapping>
 		<servlet-name>punchCard</servlet-name>
-		<url-pattern>/api</url-pattern>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
- 
+
 </web-app>

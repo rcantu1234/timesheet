@@ -1,17 +1,13 @@
 package com.skillstorm.data;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class TimesheetDAO {
 	
@@ -45,20 +41,6 @@ public class TimesheetDAO {
 
 				listUsers.add(users);
 			}
-//			out.println("<html>");
-//			out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center =center>");
-//
-//			for (User list : listUsers) {
-//				out.println("<tr>");
-//				out.println("<td align=center>" + list.getUserId() + "</td>");
-//				out.println("<td align=center>" + list.getFirstName() + "</td>");
-//				out.println("<td align=center>" + list.getLastName() + "</td>");
-//				out.println("<td align=center>" + list.getUserName() + "</td>");
-//				out.println("<td align=center>" + list.getPassword() + "</td>");
-//				out.println("</tr>");
-//			}
-//			out.println("</table>");
-//			out.println("</html>");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,59 +50,43 @@ public class TimesheetDAO {
 		}
 		return listUsers;
 	}
+	
+	public void createTimeSheet(TimeSheet time) {
+		Connection connection = null;
+		ResultSet result = null;
+		PreparedStatement ps = null;
+		
+//		TimeSheet time = new TimeSheet();
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-//	public List<User> getUsers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//		PrintWriter out = resp.getWriter();
-//
-//		resp.setContentType("text/html");
-//
-//		List<User> listUsers = new LinkedList<>();
-//		Connection connection = null;
-//		ResultSet result = null;
-//		Statement statement = null;
-//
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//		} catch (ClassNotFoundException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//
-//		try {
-//			connection = getConnection();
-//			String sql = "select * from user order by lastName";
-//			statement = connection.createStatement();
-//			result = statement.executeQuery(sql);
-//
-//			while (result.next()) {
-//				User users = new User(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
-//						result.getString(5));
-//
-//				listUsers.add(users);
-//			}
-//			out.println("<html>");
-//			out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center =center>");
-//
-//			for (User list : listUsers) {
-//				out.println("<tr>");
-//				out.println("<td align=center>" + list.getUserId() + "</td>");
-//				out.println("<td align=center>" + list.getFirstName() + "</td>");
-//				out.println("<td align=center>" + list.getLastName() + "</td>");
-//				out.println("<td align=center>" + list.getUserName() + "</td>");
-//				out.println("<td align=center>" + list.getPassword() + "</td>");
-//				out.println("</tr>");
-//			}
-//			out.println("</table>");
-//			out.println("</html>");
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			// JDBC objects
-//			close(connection, statement, result);
-//		}
-//		return listUsers;
-//	}
+		try {
+			connection = getConnection();
+			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday)"
+					+ "values(?, ?, ?, ?, ?, ?, ?)";
+			ps = connection.prepareStatement(sql);
+			
+			ps.setInt(1,  time.getMonday());
+			ps.setInt(2,  time.getTuesday());
+			ps.setInt(3,  time.getWednesday());
+			ps.setInt(4,  time.getThursday());
+			ps.setInt(5,  time.getFriday());
+			ps.setInt(6,  time.getSaturday());
+			ps.setInt(7,  time.getSunday());
+			
+			ps.execute();
+			
+			connection.close();
+			
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	public Connection getConnection() throws SQLException {
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/time_sheet", "root",

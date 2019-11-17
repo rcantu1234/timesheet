@@ -2,10 +2,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Login Form</title>
+
+<style>
+.content {
+	max-width: 500px;
+	margin: auto;
+	background: white;
+	padding: 10px;
+}
+</style>
 </head>
 <body>
-<h1> Hello World </h1>
+
+	<div class="content">
+		<table align=center>
+			<thead colspan="2">
+				<th><h1>Login</h1></th>
+			</thead>
+			<form method="GET" action="/punchCard/api">
+				<tr>
+					<td><label for="userName">Username : </label><input
+						type="text" name="userName" /></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password : </label><input
+						type="password" name="password" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Login" /></
+					<td>
+				</tr>
+			</form>
+		</table>
+	</div>
 
 </body>
 </html>
