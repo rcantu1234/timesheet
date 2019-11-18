@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -61,8 +60,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 				}
 				break;
 			case "DELETE":
-				timesheetDAO.delete(1);
-				break;
+				delete(req, resp);
+			 break;
 			default:
 				login(req, resp);
 				break;
@@ -72,6 +71,17 @@ public class PunchCardControllerServlet extends HttpServlet {
 			System.out.println("No values coming in!!!");
 		}
 	}
+
+	private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String timeSheetId = req.getParameter("timeSheetId");
+		
+		int timeSheet = Integer.parseInt(timeSheetId);
+		
+		timesheetDAO.delete(timeSheet);
+		
+		viewTimeSheet(req, resp);
+	
+}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		PrintWriter out = resp.getWriter();
@@ -105,7 +115,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 			if (result.next()) {
 				out.println("<div align=center><h1><h1>Welcome : " + userName + "</h1></div>");
 				viewTimeSheet(req, resp);
-//				System.out.println(getUser(req, resp));
+				System.out.println(getUser(req, resp));
 			} else {
 				credentials += "Invalid Name or Password!!!";
 			}
@@ -137,7 +147,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("<th><p>Saturday</p></th>");
 		out.println("<th><p>Sunday</p></th>");
 		out.println("<th><p>Edit</p></th>");
-		out.println("<th><p>Update</p></th>");
+		out.println("<th><p>Delete</p></th>");
 		out.println("</thead>");
 
 		out.println("<tr align=center>");
@@ -149,13 +159,11 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("<td align=center>" + time.getSaturday() + "</td>");
 		out.println("<td align=center>" + time.getSunday() + "</td>");
 		out.println("<td align=center><a href=http://localhost:8080/punchCard/enter_time.html>Edit</a></td>");
-		out.println("<td align=center><a href=#>Delete</a></td>");
+		out.println("<td align=center><a href=http://localhost:8080/punchCard/delete_time.html>Delete</a></td>");
 		out.println("</tr>");
 
 		out.println("</table>");
 		out.println("</html>");
-
-		System.out.println("TEST");
 	}
 
 	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

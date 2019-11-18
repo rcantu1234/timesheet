@@ -190,14 +190,12 @@ public class TimesheetDAO {
 
 			try {
 				connection = getConnection();
-				String sql = "delete from time_sheet where timeSheet timeSheetId = ?";
-				ps = connection.prepareStatement(sql);
-
+				String sql = "delete from time_sheet where timeSheetId = ?";
 				ps = connection.prepareStatement(sql);
 
 				ps.setInt(1, id);
 
-				result = ps.executeQuery();
+				ps.execute();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
