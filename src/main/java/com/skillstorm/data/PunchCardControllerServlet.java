@@ -2,6 +2,10 @@ package com.skillstorm.data;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,8 +21,10 @@ public class PunchCardControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public TimesheetDAO timesheetDAO = new TimesheetDAO();
 	public TimeSheet time = new TimeSheet();
+	public User user = new User();
+//	public PunchCardControllerServlet p = new PunchCardControllerServlet();
 
-	//@Override
+	// @Override
 //	public void init() throws ServletException {
 //		super.init();
 //
@@ -33,31 +39,32 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		PrintWriter out = resp.getWriter();
-//		// login(req, resp);
-//		out.println("<ul>");
-//		  out.println("<li><a href=/>Home</a></li>");
-//		  out.println("<li><a href=/>Login</a></li>");
-//		  out.println("<li><a href=/>Contact</a></li>");
-//		  
-//		out.println("</ul>");
+		PrintWriter out = resp.getWriter();
 
 		String theCommand = req.getParameter("command");
 
 		if (theCommand == null) {
-			theCommand = "LIST";
+			theCommand = "LOGIN";
 		}
 
 		try {
 			switch (theCommand) {
-			case "LIST":
-				createTimeSheet(req, resp);
+
+			case "LOGIN":
+				login(req, resp);
 				break;
 			case "ADD":
-				updateTimeSheet(req, resp);
+				try {
+					addTimeSheet(req, resp);
+				} catch (NumberFormatException ex) {
+					resp.sendRedirect("http://localhost:8080/punchCard/error_page.html");
+				}
+				break;
+			case "DELETE":
+				timesheetDAO.delete(1);
 				break;
 			default:
-				createTimeSheet(req, resp);
+				login(req, resp);
 				break;
 			}
 		} catch (NullPointerException ex) {
@@ -72,21 +79,45 @@ public class PunchCardControllerServlet extends HttpServlet {
 		String userName = req.getParameter("userName");
 		String password = req.getParameter("password");
 
-		String credentials = "";
+		Connection connection = null;
+		ResultSet result = null;
+		PreparedStatement ps = null;
 
-		if (userName.equalsIgnoreCase("roel") && password.equals("r0764603")) {
-			out.println("<div align=center><h1><h1>Welcome : " + userName + "</h1></div>");
-		} else {
-			credentials += "Username or password don't match";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		out.println("<div align=center><h1>" + credentials + "</h1></div>");
+
+		try {
+			connection = timesheetDAO.getConnection();
+			String sql = "select userName, password from user where userName = ? AND password = ?";
+			ps = connection.prepareStatement(sql);
+
+			ps.setString(1, userName);
+			ps.setString(2, password);
+
+			result = ps.executeQuery();
+
+			String credentials = "";
+
+			if (result.next()) {
+				out.println("<div align=center><h1><h1>Welcome : " + userName + "</h1></div>");
+				viewTimeSheet(req, resp);
+//				System.out.println(getUser(req, resp));
+			} else {
+				credentials += "Invalid Name or Password!!!";
+			}
+			out.println("<div align=center><h1>" + credentials + "</h1></div>");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public void createTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void viewTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		PrintWriter out = resp.getWriter();
-
-		time = new TimeSheet();
-		timesheetDAO.createTimeSheet(time);
 
 		out.println("<html>");
 		out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>");
@@ -117,8 +148,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("<td align=center>" + time.getFriday() + "</td>");
 		out.println("<td align=center>" + time.getSaturday() + "</td>");
 		out.println("<td align=center>" + time.getSunday() + "</td>");
-		out.println("<td align=center><a href=enter_time.html>Edit</td>");
-		out.println("<td align=center>Delete</a></td>");
+		out.println("<td align=center><a href=http://localhost:8080/punchCard/enter_time.html>Edit</a></td>");
+		out.println("<td align=center><a href=#>Delete</a></td>");
 		out.println("</tr>");
 
 		out.println("</table>");
@@ -127,7 +158,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		System.out.println("TEST");
 	}
 
-	public void updateTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 		String monday = req.getParameter("monday");
 		String tuesday = req.getParameter("tuesday");
@@ -152,26 +183,18 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		System.out.println(time.toString());
 
-		out.println("<html>");
-		out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>");
+		viewTimeSheet(req, resp);
+	}
 
-		out.println("<thead>");
-		out.println("<th colspan=9>");
-		out.println("<h1>Weekly Hours</h1>");
-		out.println("</th>");
-		out.println("</thead");
-
-		out.println("<tr align=center>");
-		out.println("<td align=center>" + time.getMonday() + "</td>");
-		out.println("<td align=center>" + time.getTuesday() + "</td>");
-		out.println("<td align=center>" + time.getWednesday() + "</td>");
-		out.println("<td align=center>" + time.getThursday() + "</td>");
-		out.println("<td align=center>" + time.getFriday() + "</td>");
-		out.println("<td align=center>" + time.getSaturday() + "</td>");
-		out.println("<td align=center>" + time.getSunday() + "</td>");
-		out.println("</tr>");
-
-		out.println("</table>");
+	public String getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		PrintWriter out = resp.getWriter();
+		List<User> users = timesheetDAO.getUsers();
+		String test = null;
+		for (User user : users) {
+			System.out.println(user.getUserName() + " " + user.getPassword());
+			test = user.getUserName() + " " + user.getPassword();
+		}
+		return test;
 
 	}
 

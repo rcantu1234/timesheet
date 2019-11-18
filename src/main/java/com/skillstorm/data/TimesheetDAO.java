@@ -10,12 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TimesheetDAO {
-	
+
 	private ConnectionFactory factory;
+	public User user = new User();
+	public TimeSheet time = new TimeSheet();
 
 	public TimesheetDAO() {
 	};
-	
+
 	public List<User> getUsers() {
 		List<User> listUsers = new LinkedList<>();
 		Connection connection = null;
@@ -50,14 +52,58 @@ public class TimesheetDAO {
 		}
 		return listUsers;
 	}
-	
+
+	public List<User> getUser() {
+		List<User> listUser = new LinkedList<>();
+		Connection connection = null;
+		ResultSet result = null;
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			connection = getConnection();
+			String sql = "select userName, password from user where userName = ? AND password = ?";
+			ps = connection.prepareStatement(sql);
+
+			ps = connection.prepareStatement(sql);
+
+			ps.setString(1, user.getUserName());
+			ps.setString(2, user.getPassword());
+
+			result = ps.executeQuery();
+			
+			if(result.next()) {
+				User user = new User(result.getString(1), result.getString(2));
+				listUser.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// JDBC objects
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return listUser;
+	}
+
 	public void createTimeSheet(TimeSheet time) {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement ps = null;
-		
+
 //		TimeSheet time = new TimeSheet();
-		
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e1) {
@@ -70,20 +116,20 @@ public class TimesheetDAO {
 			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday)"
 					+ "values(?, ?, ?, ?, ?, ?, ?)";
 			ps = connection.prepareStatement(sql);
-			
-			ps.setInt(1,  time.getMonday());
-			ps.setInt(2,  time.getTuesday());
-			ps.setInt(3,  time.getWednesday());
-			ps.setInt(4,  time.getThursday());
-			ps.setInt(5,  time.getFriday());
-			ps.setInt(6,  time.getSaturday());
-			ps.setInt(7,  time.getSunday());
-			
+
+			ps.setInt(1, time.getMonday());
+			ps.setInt(2, time.getTuesday());
+			ps.setInt(3, time.getWednesday());
+			ps.setInt(4, time.getThursday());
+			ps.setInt(5, time.getFriday());
+			ps.setInt(6, time.getSaturday());
+			ps.setInt(7, time.getSunday());
+
 			ps.execute();
-			
+
 			connection.close();
-			
-		} catch(SQLException ex) {
+
+		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 	}
@@ -130,8 +176,40 @@ public class TimesheetDAO {
 //		
 //	}
 //	
-//	public void delete delete(int id) {
-//		
-//	}
+	public void delete(int id) {
+			Connection connection = null;
+			ResultSet result = null;
+			PreparedStatement ps = null;
+			
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			try {
+				connection = getConnection();
+				String sql = "delete from time_sheet where timeSheet timeSheetId = ?";
+				ps = connection.prepareStatement(sql);
+
+				ps = connection.prepareStatement(sql);
+
+				ps.setInt(1, id);
+
+				result = ps.executeQuery();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				// JDBC objects
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+	}
 
 }
