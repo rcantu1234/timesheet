@@ -17,8 +17,8 @@ public class TimesheetDAO {
 
 	public TimesheetDAO() {
 	};
-	
-	public TimeSheet getTimeSheets(int timeSheetId) {
+
+	public List<TimeSheet> getTimeSheets(int timeSheetId) {
 		List<TimeSheet> listTimeSheets = new LinkedList<>();
 		Connection connection = null;
 		ResultSet result = null;
@@ -35,12 +35,13 @@ public class TimesheetDAO {
 		try {
 			connection = getConnection();
 			String sql = "select * from time_sheet where timeSheetId = " + timeSheetId;
-			statement = connection.createStatement();			
+			statement = connection.createStatement();
 			result = statement.executeQuery(sql);
 
 			while (result.next()) {
-				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4), result.getInt(5),
-						result.getInt(6), result.getInt(7), result.getInt(8));
+				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
+						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8));
+				listTimeSheets.add(timeSheets);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -49,7 +50,7 @@ public class TimesheetDAO {
 			// JDBC objects
 			close(connection, statement, result);
 		}
-		return timeSheets;
+		return listTimeSheets;
 	}
 
 	public List<User> getUsers() {
@@ -109,8 +110,8 @@ public class TimesheetDAO {
 			ps.setString(2, user.getPassword());
 
 			result = ps.executeQuery();
-			
-			if(result.next()) {
+
+			if (result.next()) {
 				User user = new User(result.getString(1), result.getString(2));
 				listUser.add(user);
 			}
@@ -133,8 +134,6 @@ public class TimesheetDAO {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement ps = null;
-
-//		TimeSheet time = new TimeSheet();
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -209,37 +208,37 @@ public class TimesheetDAO {
 //	}
 //	
 	public void delete(int id) {
-			Connection connection = null;
-			ResultSet result = null;
-			PreparedStatement ps = null;
-			
+		Connection connection = null;
+		ResultSet result = null;
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			connection = getConnection();
+			String sql = "delete from time_sheet where timeSheetId = ?";
+			ps = connection.prepareStatement(sql);
+
+			ps.setInt(1, id);
+
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// JDBC objects
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			try {
-				connection = getConnection();
-				String sql = "delete from time_sheet where timeSheetId = ?";
-				ps = connection.prepareStatement(sql);
-
-				ps.setInt(1, id);
-
-				ps.execute();
+				connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} finally {
-				// JDBC objects
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
+		}
 	}
 
 }

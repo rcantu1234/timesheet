@@ -7,7 +7,8 @@ public class App {
 
 		TimesheetDAO timesheetDAO = new TimesheetDAO();
 		
-		System.out.println(timesheetDAO.getTimeSheets(1));
+		System.out.println(timesheetDAO.getTimeSheets(10));
+		
 
 	}
 

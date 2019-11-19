@@ -21,20 +21,6 @@ public class PunchCardControllerServlet extends HttpServlet {
 	public TimesheetDAO timesheetDAO = new TimesheetDAO();
 	public TimeSheet time = new TimeSheet();
 	public User user = new User();
-//	public PunchCardControllerServlet p = new PunchCardControllerServlet();
-
-	// @Override
-//	public void init() throws ServletException {
-//		super.init();
-//
-//		try {
-////			timesheetDAO = new TimesheetDAO();
-////			time = new TimeSheet();
-//		} catch (Exception ex) {
-//			throw new ServletException(ex);
-//		}
-//
-//	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -81,8 +67,12 @@ public class PunchCardControllerServlet extends HttpServlet {
 		int timeSheet = Integer.parseInt(timeSheetId);
 
 		timesheetDAO.delete(timeSheet);
+		
+		time = new TimeSheet();
+		timesheetDAO.createTimeSheet(time);
 
-		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+		viewTimeSheet(req, resp);
+//		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -141,6 +131,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("</thead");
 
 		out.println("<thead>");
+		out.println("<th><p>Time Sheet Id</p></th>");
 		out.println("<th><p>Monday</p></th>");
 		out.println("<th><p>Tuesday</p></th>");
 		out.println("<th><p>Wednesday</p></th>");
@@ -153,6 +144,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("</thead>");
 
 		out.println("<tr align=center>");
+		out.println("<td align=center>" + time.getTimeSheetId() + "</td>");
 		out.println("<td align=center>" + time.getMonday() + "</td>");
 		out.println("<td align=center>" + time.getTuesday() + "</td>");
 		out.println("<td align=center>" + time.getWednesday() + "</td>");
@@ -186,11 +178,9 @@ public class PunchCardControllerServlet extends HttpServlet {
 		int sat = Integer.parseInt(saturday);
 		int sun = Integer.parseInt(sunday);
 
-		PrintWriter out = resp.getWriter();
-
 		time = new TimeSheet(mon, tues, wed, thurs, fri, sat, sun);
 		timesheetDAO.createTimeSheet(time);
-
+		
 		System.out.println(time.toString());
 
 		viewTimeSheet(req, resp);
