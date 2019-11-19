@@ -43,12 +43,15 @@ public class PunchCardControllerServlet extends HttpServlet {
 		String theCommand = req.getParameter("command");
 
 		if (theCommand == null) {
-			theCommand = "LOGIN";
+			theCommand = "HOME";
 		}
 
 		try {
 			switch (theCommand) {
 
+			case "HOME":
+				resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+				break;
 			case "LOGIN":
 				login(req, resp);
 				break;
@@ -61,7 +64,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 				break;
 			case "DELETE":
 				delete(req, resp);
-			 break;
+				break;
 			default:
 				login(req, resp);
 				break;
@@ -74,14 +77,13 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String timeSheetId = req.getParameter("timeSheetId");
-		
+
 		int timeSheet = Integer.parseInt(timeSheetId);
-		
+
 		timesheetDAO.delete(timeSheet);
-		
-		viewTimeSheet(req, resp);
-	
-}
+
+		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		PrintWriter out = resp.getWriter();

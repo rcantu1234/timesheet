@@ -29,6 +29,17 @@ public class TimeSheet {
 		this.saturday = saturday;
 		this.sunday = sunday;
 	}
+	
+	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, int sunday) {
+		this.timeSheetId = timeSheetId;
+		this.monday = monday;
+		this.tuesday = tuesday;
+		this.wednesday = wednesday;
+		this.thursday = thursday;
+		this.friday = friday;
+		this.saturday = saturday;
+		this.sunday = sunday;
+	}
 
 	public int getTimeSheetId() {
 		return timeSheetId;

@@ -4,24 +4,36 @@
 <meta charset="UTF-8">
 <title>Login Form</title>
 
-<style>
-.content {
-	max-width: 500px;
-	margin: auto;
-	background: white;
-	padding: 10px;
-}
-</style>
+<link href="resources/resources.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
 
-	<div class="content">
+	<div class="topnav">
+		<a class="active" href="http://localhost:8080/punchCard/home.html">Home</a>
+		<a href="http://localhost:8080/punchCard/index.html">Login</a> <a
+			href="#contact">My Time Sheets</a> <a href="#about">About</a>
+	</div>
+
+<!-- 	<div class="box">
+		<img src="avatar.png" class="avatar">
+		<h1>Login Here</h1>
+		<form>
+			<label for="userName">Username : </label><input type="text"
+				name="userName" placeholder="Enter Username" /> 
+			<label for="userName">Password : </label><input
+				type="text" name="userName" placeholder="Enter Username" />
+			<input type="submit" value="Login" />
+		</form>
+	</div> -->
+
+	<div>
 		<table align=center>
 			<thead colspan="2">
-				<th><h1>Login</h1></th>
+				<th><h1>Login Form</h1></th>
 			</thead>
 			<form method="GET" action="/punchCard/api">
-			<input type="hidden" name="command" value="LOGIN" />
+				<input type="hidden" name="command" value="LOGIN" />
 				<tr>
 					<td><label for="userName">Username : </label><input
 						type="text" name="userName" /></td>
@@ -36,7 +48,7 @@
 				</tr>
 			</form>
 		</table>
-	</div>
+	</div> 
 
 </body>
 </html>

@@ -17,6 +17,40 @@ public class TimesheetDAO {
 
 	public TimesheetDAO() {
 	};
+	
+	public TimeSheet getTimeSheets(int timeSheetId) {
+		List<TimeSheet> listTimeSheets = new LinkedList<>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		TimeSheet timeSheets = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			connection = getConnection();
+			String sql = "select * from time_sheet where timeSheetId = " + timeSheetId;
+			statement = connection.createStatement();			
+			result = statement.executeQuery(sql);
+
+			while (result.next()) {
+				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4), result.getInt(5),
+						result.getInt(6), result.getInt(7), result.getInt(8));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// JDBC objects
+			close(connection, statement, result);
+		}
+		return timeSheets;
+	}
 
 	public List<User> getUsers() {
 		List<User> listUsers = new LinkedList<>();
@@ -69,8 +103,6 @@ public class TimesheetDAO {
 		try {
 			connection = getConnection();
 			String sql = "select userName, password from user where userName = ? AND password = ?";
-			ps = connection.prepareStatement(sql);
-
 			ps = connection.prepareStatement(sql);
 
 			ps.setString(1, user.getUserName());
