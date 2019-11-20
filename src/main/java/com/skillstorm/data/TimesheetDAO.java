@@ -148,14 +148,16 @@ public class TimesheetDAO {
 					+ "values(?, ?, ?, ?, ?, ?, ?)";
 
 			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
+			
+			System.out.println(timesheet.getMonday());
 
-			ps.setInt(1, time.getMonday());
-			ps.setInt(2, time.getTuesday());
-			ps.setInt(3, time.getWednesday());
-			ps.setInt(4, time.getThursday());
-			ps.setInt(5, time.getFriday());
-			ps.setInt(6, time.getSaturday());
-			ps.setInt(7, time.getSunday());
+			ps.setInt(1, timesheet.getMonday());
+			ps.setInt(2, timesheet.getTuesday());
+			ps.setInt(3, timesheet.getWednesday());
+			ps.setInt(4, timesheet.getThursday());
+			ps.setInt(5, timesheet.getFriday());
+			ps.setInt(6, timesheet.getSaturday());
+			ps.setInt(7, timesheet.getSunday());
 
 			ps.executeUpdate();
 
