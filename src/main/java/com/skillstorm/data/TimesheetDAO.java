@@ -40,7 +40,7 @@ public class TimesheetDAO {
 
 			while (result.next()) {
 				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
-						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8));
+						result.getInt(5), result.getInt(6), result.getInt(7));
 				listTimeSheets.add(timeSheets);
 			}
 		} catch (SQLException e) {
@@ -130,9 +130,9 @@ public class TimesheetDAO {
 		return listUser;
 	}
 
-	public void createTimeSheet(TimeSheet time) {
+	public TimeSheet createTimeSheet(TimeSheet timesheet) {
 		Connection connection = null;
-		ResultSet result = null;
+		ResultSet keys = null;
 		PreparedStatement ps = null;
 
 		try {
@@ -146,7 +146,8 @@ public class TimesheetDAO {
 			connection = getConnection();
 			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday)"
 					+ "values(?, ?, ?, ?, ?, ?, ?)";
-			ps = connection.prepareStatement(sql);
+
+			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
 
 			ps.setInt(1, time.getMonday());
 			ps.setInt(2, time.getTuesday());
@@ -156,13 +157,20 @@ public class TimesheetDAO {
 			ps.setInt(6, time.getSaturday());
 			ps.setInt(7, time.getSunday());
 
-			ps.execute();
+			ps.executeUpdate();
 
-			connection.close();
+			keys = ps.getGeneratedKeys();
 
+			while (keys.next()) {
+				int timeSheetId = keys.getInt(1);
+				timesheet.setTimeSheetId(timeSheetId);
+			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} finally {
+			close(connection, ps, keys);
 		}
+		return timesheet;
 	}
 
 	public Connection getConnection() throws SQLException {

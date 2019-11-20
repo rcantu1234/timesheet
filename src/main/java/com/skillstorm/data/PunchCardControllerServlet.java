@@ -45,6 +45,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 				try {
 					addTimeSheet(req, resp);
 				} catch (NumberFormatException ex) {
+					System.out.println(ex);
 					resp.sendRedirect("http://localhost:8080/punchCard/error_page.html");
 				}
 				break;
@@ -67,7 +68,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		int timeSheet = Integer.parseInt(timeSheetId);
 
 		timesheetDAO.delete(timeSheet);
-		
+
 		time = new TimeSheet();
 		timesheetDAO.createTimeSheet(time);
 
@@ -106,7 +107,10 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 			if (result.next()) {
 				out.println("<div align=center><h1><h1>Welcome : " + userName + "</h1></div>");
-				viewTimeSheet(req, resp);
+				out.println("<a href=http://localhost:8080/punchCard/enter_time.html>New Timesheet</a>");
+				//viewTimeSheet(req, resp);
+//				resp.sendRedirect("http://localhost:8080/punchCard/welcome_page.html");
+
 				System.out.println(getUser(req, resp));
 			} else {
 				credentials += "Invalid Name or Password!!!";
@@ -142,7 +146,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("<th><p>Edit</p></th>");
 		out.println("<th><p>Delete</p></th>");
 		out.println("</thead>");
-
+	
 		out.println("<tr align=center>");
 		out.println("<td align=center>" + time.getTimeSheetId() + "</td>");
 		out.println("<td align=center>" + time.getMonday() + "</td>");
@@ -161,7 +165,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 	}
 
 	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+		
 		String monday = req.getParameter("monday");
 		String tuesday = req.getParameter("tuesday");
 		String wednesday = req.getParameter("wednesday");
@@ -180,10 +184,20 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		time = new TimeSheet(mon, tues, wed, thurs, fri, sat, sun);
 		timesheetDAO.createTimeSheet(time);
-		
+
 		System.out.println(time.toString());
 
 		viewTimeSheet(req, resp);
+	}
+
+	public List<TimeSheet> getTimeSheets(HttpServletRequest req, HttpServletResponse resp) {
+		String timeSheetId = req.getParameter("timeSheetId");
+
+		int id = Integer.parseInt(timeSheetId);
+
+		List<TimeSheet> listSheets = timesheetDAO.getTimeSheets(id);
+
+		return listSheets;
 	}
 
 	public String getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -195,7 +209,6 @@ public class PunchCardControllerServlet extends HttpServlet {
 			test = user.getUserName() + " " + user.getPassword();
 		}
 		return test;
-
 	}
 
 	public void listUsers(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

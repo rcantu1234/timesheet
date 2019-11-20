@@ -9,29 +9,10 @@ public class TimeSheet {
 	private int friday;
 	private int saturday;
 	private int sunday;
-
-	public TimeSheet() {
-		this.monday = 0;
-		this.tuesday = 0;
-		this.wednesday = 0;
-		this.thursday = 0;
-		this.friday = 0;
-		this.saturday = 0;
-		this.sunday = 0;
-	}
+	
+	public TimeSheet() {};
 
 	public TimeSheet(int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, int sunday) {
-		this.monday = monday;
-		this.tuesday = tuesday;
-		this.wednesday = wednesday;
-		this.thursday = thursday;
-		this.friday = friday;
-		this.saturday = saturday;
-		this.sunday = sunday;
-	}
-	
-	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, int sunday) {
-		this.timeSheetId = timeSheetId;
 		this.monday = monday;
 		this.tuesday = tuesday;
 		this.wednesday = wednesday;
