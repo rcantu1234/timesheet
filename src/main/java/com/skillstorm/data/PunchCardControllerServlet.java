@@ -69,11 +69,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		timesheetDAO.delete(timeSheet);
 
-		time = new TimeSheet();
-		timesheetDAO.createTimeSheet(time);
-
 		viewTimeSheet(req, resp);
-//		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

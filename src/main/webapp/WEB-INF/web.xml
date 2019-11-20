@@ -7,7 +7,7 @@
 	<display-name>puhchCard</display-name>
 
 	<welcome-file-list>
-		<welcome-file>home.html</welcome-file>
+		<welcome-file>login.html</welcome-file>
 	</welcome-file-list>
 
 	<servlet>
