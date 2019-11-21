@@ -4,55 +4,66 @@
 <meta charset="UTF-8">
 <title>Enter Time</title>
 
-<link href="resources/resources.css" rel="stylesheet" type="text/css" />
+<link href="resources/time_sheet.css" rel="stylesheet" type="text/css" />
+
 
 </head>
 <body>
 
-	<div>
+	<div class="topnav">
+		<input type="hidden" name="command" value="HOME" />
 		<div class="topnav">
 			<input type="hidden" name="command" value="HOME" /> <a
 				class="active" href="http://localhost:8080/punchCard/home.html">Home</a>
-			<a href="http://localhost:8080/punchCard/index.html">Login</a> <a
-				href="#contact">My Time Sheets</a> <a href="#about">About</a>
+			<a href="http://localhost:8080/punchCard/enter_time.html">Create
+				Timesheet</a> <a
+				href="http://localhost:8080/punchCard/view_time_sheets.html">View
+				Time Sheets</a><a
+				href="http://localhost:8080/punchCard/delete_time.html">Delete
+				Time Sheets</a> <a href="#contact">Contact</a>
+				</div>
 		</div>
 	</div>
 
-	<div>
-		<form method="GET" action="/punchCard/api/">
-			<input type="hidden" name="command" value="ADD" />
+	<div style="margin-top: 150px;">
+		<div>
+			<form method="GET" action="/punchCard/api/">
+				<input type="hidden" name="command" value="ADD" />
 
-			<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>
-				<thead>
-					<th colspan=9>
-						<h1>Weekly Hours</h1>
-					</th>
-				</thead>
+				<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>
+					<thead>
+						<th colspan=9>
+							<h1>Weekly Hours</h1>
+						</th>
+					</thead>
 
-				<thead>
-					<th><p>Monday</p></th>
-					<th><p>Tuesday</p></th>
-					<th><p>Wednesday</p></th>
-					<th><p>Thursday</p></th>
-					<th><p>Friday</p></th>
-					<th><p>Saturday</p></th>
-					<th><p>Sunday</p></th>
-				</thead>
+					<thead>
+						<th><p>Monday</p></th>
+						<th><p>Tuesday</p></th>
+						<th><p>Wednesday</p></th>
+						<th><p>Thursday</p></th>
+						<th><p>Friday</p></th>
+						<th><p>Saturday</p></th>
+						<th><p>Sunday</p></th>
+						<th><p>User ID</p></th>
+					</thead>
 
-				<tr align="center">
-					<td align=center><input type="text" name="monday" /></td>
-					<td align=center><input type="text" name="tuesday" /></td>
-					<td align=center><input type="text" name="wednesday" /></td>
-					<td align=center><input type="text" name="thursday" /></td>
-					<td align=center><input type="text" name="friday" /></td>
-					<td align=center><input type="text" name="saturday" /></td>
-					<td align=center><input type="text" name="sunday" /></td>
-				</tr>
-				<tr>
-					<td align=center colspan=9><input type=submit value=Save /></td>
-				</tr>
-			</table>
-		</form>
+					<tr align="center">
+						<td align=center><input type="text" name="monday" /></td>
+						<td align=center><input type="text" name="tuesday" /></td>
+						<td align=center><input type="text" name="wednesday" /></td>
+						<td align=center><input type="text" name="thursday" /></td>
+						<td align=center><input type="text" name="friday" /></td>
+						<td align=center><input type="text" name="saturday" /></td>
+						<td align=center><input type="text" name="sunday" /></td>
+						<td align=center><input type="text" name=userId /></td>
+					</tr>
+					<tr>
+						<td align=center colspan=9><input type=submit value=Save /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
 </body>
 </html>

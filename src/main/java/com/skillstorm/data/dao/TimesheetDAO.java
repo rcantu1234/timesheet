@@ -1,4 +1,4 @@
-package com.skillstorm.data;
+package com.skillstorm.data.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +9,10 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.skillstorm.data.ConnectionFactory;
+import com.skillstorm.data.TimeSheet;
+import com.skillstorm.data.User;
+
 public class TimesheetDAO {
 
 	private ConnectionFactory factory;
@@ -18,7 +22,7 @@ public class TimesheetDAO {
 	public TimesheetDAO() {
 	};
 
-	public List<TimeSheet> getTimeSheets(int timeSheetId) {
+	public List<TimeSheet> getTimeSheets(int userId) {
 		List<TimeSheet> listTimeSheets = new LinkedList<>();
 		Connection connection = null;
 		ResultSet result = null;
@@ -34,13 +38,13 @@ public class TimesheetDAO {
 
 		try {
 			connection = getConnection();
-			String sql = "select * from time_sheet where timeSheetId = " + timeSheetId;
+			String sql = "select * from time_sheet where userId = " + userId;
 			statement = connection.createStatement();
 			result = statement.executeQuery(sql);
 
 			while (result.next()) {
 				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
-						result.getInt(5), result.getInt(6), result.getInt(7));
+						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9));
 				listTimeSheets.add(timeSheets);
 			}
 		} catch (SQLException e) {
@@ -133,7 +137,7 @@ public class TimesheetDAO {
 	public TimeSheet createTimeSheet(TimeSheet timesheet) {
 		Connection connection = null;
 		ResultSet keys = null;
-		PreparedStatement ps = null;
+		PreparedStatement ps = null;		
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -144,8 +148,8 @@ public class TimesheetDAO {
 
 		try {
 			connection = getConnection();
-			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday)"
-					+ "values(?, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId)"
+					+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
 
 			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
 			
@@ -158,7 +162,8 @@ public class TimesheetDAO {
 			ps.setInt(5, timesheet.getFriday());
 			ps.setInt(6, timesheet.getSaturday());
 			ps.setInt(7, timesheet.getSunday());
-
+			ps.setInt(8, timesheet.getUserId());
+			
 			ps.executeUpdate();
 
 			keys = ps.getGeneratedKeys();
