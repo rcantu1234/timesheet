@@ -3,17 +3,19 @@ package com.skillstorm.data;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.skillstorm.data.dao.TimesheetDAO;
+import javax.servlet.http.HttpSession;
 
 public class PunchCardControllerServlet extends HttpServlet {
 	/**
@@ -52,6 +54,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 				} catch (NumberFormatException ex) {
 					System.out.println(ex);
 					resp.sendRedirect("http://localhost:8080/punchCard/error_page.html");
+				} catch (ParseException ex) {
+					System.out.println(ex);
 				}
 				break;
 			case "DELETE":
@@ -75,6 +79,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		timesheetDAO.delete(timeSheet);
 
 		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+//		getAllTimeSheets(req, resp);
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -108,18 +113,24 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 			if (result.next()) {
 //				out.println("<div align=center><h1><h1>Welcome : " + user.getFirstName() + " " + user.getLastName() + "</h1></div>");
+				HttpSession session = req.getSession();
+				session.setAttribute("userName", userName);
+				System.out.println(req.getSession().getAttribute("userName"));
 				resp.sendRedirect("http://localhost:8080/punchCard/home.html");
 				System.out.println(getUsers(req, resp));
 			} else {
 				credentials += "Invalid Name or Password!!!";
+				out.println("<div align=center><h1>" + credentials + "</h1></div>");
+
 			}
-			out.println("<div align=center><h1>" + credentials + "</h1></div>");
+//			out.println("<div align=center><h1>" + credentials + "</h1></div>");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
+	// reflects enter_time.html which returns all results after entering hours.
 	public void getAllTimeSheets(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		PrintWriter out = resp.getWriter();	
 		
@@ -127,31 +138,42 @@ public class PunchCardControllerServlet extends HttpServlet {
 		
 		int uId = Integer.parseInt(userId);
 		
-		List<TimeSheet> timeSheets = timesheetDAO.getTimeSheets(uId);
+		time.getUserId();
 		
+		List<TimeSheet> timeSheets = timesheetDAO.getTimeSheets(uId);	  
+		
+		out.println("<!DOCTYPE html>");
 		out.println("<html>");
-		out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>");
+		out.println("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'>");
+		out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>");
+		out.println("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>");
+
+//		out.println("<head><style>h1{color: blue; background-color: }</style></head>");
+		out.println("<br><br><br>");
+		out.println("<table class='table table-hover' id=table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%>");
 
 		out.println("<thead>");
-		out.println("<th colspan=9>");
-		out.println("<h1>Weekly Hours</h1>");
+		out.println("<th colspan=11>");
+		out.println("<h1 align=center>Weekly Hours</h1>");
 		out.println("</th>");
 		out.println("</thead");
 
-		out.println("<thead>");
-		out.println("<th><p>Time Sheet Id</p></th>");
-		out.println("<th><p>Monday</p></th>");
-		out.println("<th><p>Tuesday</p></th>");
-		out.println("<th><p>Wednesday</p></th>");
-		out.println("<th><p>Thursday</p></th>");
-		out.println("<th><p>Friday</p></th>");
-		out.println("<th><p>Saturday</p></th>");
-		out.println("<th><p>Sunday</p></th>");
-		out.println("<th><p>User Id</p></th>");		
+		out.println("<thead align=center>");
+		out.println("<th>Time Sheet Id</th>");
+		out.println("<th>Monday</th>");
+		out.println("<th>Tuesday</th>");
+		out.println("<th>Wednesday</th>");
+		out.println("<th>Thursday</th>");
+		out.println("<th>Friday</th>");
+		out.println("<th>Saturday</th>");
+		out.println("<th>Sunday</th>");
+		out.println("<th>Total Hours</th>");
+		out.println("<th>User Id</th>");
+		out.println("<th>Choose</th>");
 		out.println("</thead>");
-	
+			
 		for(TimeSheet list : timeSheets) {
-			out.println("<tr align=center>");
+			out.println("<tr class=success align=center> ");
 			out.println("<td align=center>" + list.getTimeSheetId() + "</td>");
 			out.println("<td align=center>" + list.getMonday() + "</td>");
 			out.println("<td align=center>" + list.getTuesday() + "</td>");
@@ -160,69 +182,31 @@ public class PunchCardControllerServlet extends HttpServlet {
 			out.println("<td align=center>" + list.getFriday() + "</td>");
 			out.println("<td align=center>" + list.getSaturday() + "</td>");
 			out.println("<td align=center>" + list.getSunday() + "</td>");
+			out.println("<td align=center>" + list.getTotalHours() + "</td>");
 			out.println("<td align=center>" + list.getUserId() + "</td>");
+			out.println("<td><input type=button value=Delete /></td>");
 			out.println("</tr>");
 //			out.println("<td align=center><a href=http://localhost:8080/punchCard/enter_time.html>Edit</a></td>");
 //			out.println("<td align=center><a href=http://localhost:8080/punchCard/delete_time.html>Delete</a></td>");
 		}
-			
-		out.println("<tr align=center>");
-		out.println("<td align=center colspan=4><input type=submit value=Delete /></td>");
-		out.println("<td align=center colspan=4><input type=submit value=Save /></td>");
-		out.println("</tr>");
 
 		out.println("</table>");
+		
+		out.println("<script type=text/javascript>");
+		out.println("var index, table = document.getElementById('table')");
+		out.println("for(var i = 0; i < table.rows.length; i++)");
+		out.println("table.rows[i].cells[3].onclick = function()");
+		out.println("{");
+		out.println("index = this.parentElement.rowIndex;");
+		out.println("table.deleteRow(index);");
+		out.println("console.log(index);");
+		out.println("}");
+		out.println("</script>");
 		out.println("</html>");
 	}
 
-	public void viewTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		PrintWriter out = resp.getWriter();
+	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ParseException {
 
-		out.println("<html>");
-		out.println("<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>");
-
-		out.println("<thead>");
-		out.println("<th colspan=9>");
-		out.println("<h1>Weekly Hours</h1>");
-		out.println("</th>");
-		out.println("</thead");
-
-		out.println("<thead>");
-		out.println("<th><p>Time Sheet Id</p></th>");
-		out.println("<th><p>Monday</p></th>");
-		out.println("<th><p>Tuesday</p></th>");
-		out.println("<th><p>Wednesday</p></th>");
-		out.println("<th><p>Thursday</p></th>");
-		out.println("<th><p>Friday</p></th>");
-		out.println("<th><p>Saturday</p></th>");
-		out.println("<th><p>Sunday</p></th>");
-		out.println("<th><p>User Id</p></th>");
-		
-		out.println("</thead>");
-	
-		out.println("<tr align=center>");
-		out.println("<td align=center>" + time.getTimeSheetId() + "</td>");
-		out.println("<td align=center>" + time.getMonday() + "</td>");
-		out.println("<td align=center>" + time.getTuesday() + "</td>");
-		out.println("<td align=center>" + time.getWednesday() + "</td>");
-		out.println("<td align=center>" + time.getThursday() + "</td>");
-		out.println("<td align=center>" + time.getFriday() + "</td>");
-		out.println("<td align=center>" + time.getSaturday() + "</td>");
-		out.println("<td align=center>" + time.getSunday() + "</td>");
-		out.println("<td align=center>" + time.getUserId() + "</td>");
-		out.println("</tr>");
-			
-		out.println("<tr align=center>");
-		out.println("<td align=center colspan=4><input type=submit value=Delete /></td>");
-		out.println("<td align=center colspan=4><input type=submit value=Save /></td>");
-		out.println("</tr>");
-
-		out.println("</table>");
-		out.println("</html>");
-	}
-
-	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
 		String monday = req.getParameter("monday");
 		String tuesday = req.getParameter("tuesday");
 		String wednesday = req.getParameter("wednesday");
@@ -240,8 +224,10 @@ public class PunchCardControllerServlet extends HttpServlet {
 		int sat = Integer.parseInt(saturday);
 		int sun = Integer.parseInt(sunday);
 		int uId = Integer.parseInt(userId);
+		
+		int totalHours = mon + tues + wed + thurs + fri + sat + sun;
 
-		time = new TimeSheet(mon, tues, wed, thurs, fri, sat, sun, uId);
+		time = new TimeSheet(mon, tues, wed, thurs, fri, sat, sun, totalHours, uId);
 		timesheetDAO.createTimeSheet(time);
 
 		System.out.println(time.toString());

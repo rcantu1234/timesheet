@@ -5,7 +5,18 @@
 <title>Enter Time</title>
 
 <link href="resources/time_sheet.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -21,23 +32,23 @@
 				Time Sheets</a><a
 				href="http://localhost:8080/punchCard/delete_time.html">Delete
 				Time Sheets</a> <a href="#contact">Contact</a>
-				</div>
 		</div>
 	</div>
 
-	<div style="margin-top: 150px;">
+	<div style="margin-top: 70px;">
 		<div>
-			<form method="GET" action="/punchCard/api/">
+			<form method="GET" action="/punchCard/api/" id="add">
 				<input type="hidden" name="command" value="ADD" />
 
-				<table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50% align=center>
-					<thead>
+				<table class="table" border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%
+					align=center>
+					<thead class="bg-success">
 						<th colspan=9>
-							<h1>Weekly Hours</h1>
+							<h1 style="color: white;">Weekly Hours</h1>
 						</th>
 					</thead>
 
-					<thead>
+					<thead align="center">
 						<th><p>Monday</p></th>
 						<th><p>Tuesday</p></th>
 						<th><p>Wednesday</p></th>
@@ -48,7 +59,7 @@
 						<th><p>User ID</p></th>
 					</thead>
 
-					<tr align="center">
+					<tr align="center" class="bg-success">
 						<td align=center><input type="text" name="monday" /></td>
 						<td align=center><input type="text" name="tuesday" /></td>
 						<td align=center><input type="text" name="wednesday" /></td>
@@ -59,11 +70,38 @@
 						<td align=center><input type="text" name=userId /></td>
 					</tr>
 					<tr>
-						<td align=center colspan=9><input type=submit value=Save /></td>
+						<td align=center colspan=9><input id="add" type=submit
+							class="save" value=Save /></td>
 					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
+
+	<!-- <div>
+		<h1>
+			TOTAL HOURS :
+			<h1 id="answer"></h1>
+		</h1>
+	</div> -->
+
+	<script>
+		function calculateTotalHours() {
+			var monday = document.getElementById("monday").value;
+			var tuesday = document.getElementById("tuesday").value;
+			var wednesday = document.getElementById("wednesday").value;
+			var thursday = document.getElementById("thursday").value;
+			var friday = document.getElementById("friday").value;
+			var saturday = document.getElementById("saturday").value;
+			var sunday = document.getElementById("sunday").value;
+
+			var totalHours = monday + tuesday + wednesday + thursday + friday
+					+ saturday + sunday;
+
+			if (!isNaN(totalHours)) {
+				document.getElementById("answer").innerHTML = totalHours;
+			}
+		}
+	</script>
 </body>
 </html>

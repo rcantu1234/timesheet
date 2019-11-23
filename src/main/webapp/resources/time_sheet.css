@@ -31,6 +31,18 @@ body {
 	color: white;
 }
 
+.save {
+	border: none;
+	background-color: #4CAF50;
+	outline: none;
+	height: 50px;
+	width: 150px;
+	color: #fff;
+	font-size: 18px;
+	border-radius: 30px;
+	transition: 0.4% ease;
+}
+
 .box {
 	width: 320px;
 	height: 380px;
@@ -44,7 +56,7 @@ body {
 	box-sizing: border-box;
 	border-radius: 10px;
 	transition: 0.2% ease;
-	opacity: 0.7
+	opacity: 0.7;
 }
 
 .avatar {
@@ -81,7 +93,7 @@ h1 {
 
 .box input[type="submit"] {
 	border: none;
-	background-color: #fb2525;
+	background-color: #4CAF50;
 	outline: none;
 	height: 40px;
 	color: #fff;

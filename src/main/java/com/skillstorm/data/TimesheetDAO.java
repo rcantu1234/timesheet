@@ -1,6 +1,7 @@
-package com.skillstorm.data.dao;
+package com.skillstorm.data;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.skillstorm.data.ConnectionFactory;
-import com.skillstorm.data.TimeSheet;
-import com.skillstorm.data.User;
 
 public class TimesheetDAO {
 
@@ -133,7 +130,7 @@ public class TimesheetDAO {
 		}
 		return listUser;
 	}
-
+	
 	public TimeSheet createTimeSheet(TimeSheet timesheet) {
 		Connection connection = null;
 		ResultSet keys = null;
@@ -148,8 +145,8 @@ public class TimesheetDAO {
 
 		try {
 			connection = getConnection();
-			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId)"
-					+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, total_hours, userId)"
+					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
 			
@@ -162,7 +159,8 @@ public class TimesheetDAO {
 			ps.setInt(5, timesheet.getFriday());
 			ps.setInt(6, timesheet.getSaturday());
 			ps.setInt(7, timesheet.getSunday());
-			ps.setInt(8, timesheet.getUserId());
+			ps.setInt(8, timesheet.getTotalHours());
+			ps.setInt(9, timesheet.getUserId());
 			
 			ps.executeUpdate();
 
@@ -179,6 +177,52 @@ public class TimesheetDAO {
 		}
 		return timesheet;
 	}
+
+//	public TimeSheet createTimeSheet(TimeSheet timesheet) {
+//		Connection connection = null;
+//		ResultSet keys = null;
+//		PreparedStatement ps = null;		
+//
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//		} catch (ClassNotFoundException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//
+//		try {
+//			connection = getConnection();
+//			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId)"
+//					+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
+//
+//			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
+//			
+//			System.out.println(timesheet.getMonday());
+//
+//			ps.setInt(1, timesheet.getMonday());
+//			ps.setInt(2, timesheet.getTuesday());
+//			ps.setInt(3, timesheet.getWednesday());
+//			ps.setInt(4, timesheet.getThursday());
+//			ps.setInt(5, timesheet.getFriday());
+//			ps.setInt(6, timesheet.getSaturday());
+//			ps.setInt(7, timesheet.getSunday());
+//			ps.setInt(8, timesheet.getUserId());
+//			
+//			ps.executeUpdate();
+//
+//			keys = ps.getGeneratedKeys();
+//
+//			while (keys.next()) {
+//				int timeSheetId = keys.getInt(1);
+//				timesheet.setTimeSheetId(timeSheetId);
+//			}
+//		} catch (SQLException ex) {
+//			ex.printStackTrace();
+//		} finally {
+//			close(connection, ps, keys);
+//		}
+//		return timesheet;
+//	}
 
 	public Connection getConnection() throws SQLException {
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/time_sheet", "root",

@@ -8,14 +8,33 @@
 
 </head>
 <body>
-	<div>
+
+<form id="add">
+        <input type="text" name="firstName" id="firstName" />
+        <input type="submit" value="Add" />
+    </form>
+
+
+    <div>
+        <table id="list">
+            <tr>
+                <th>FIRST NAME</th>
+            </tr>
+        </table>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+
+
+<!-- 	<div>
 		<table align=center>
 			<thead colspan="2">
 				<th><h1>Login Form</h1></th>
 			</thead>
 			<form>
-<!-- 				<input type="hidden" name="command" value="LOGIN" />
- -->				<tr>
+				<input type="hidden" name="command" value="LOGIN" />
+				<tr>
 					<td><label for="userName">Username : </label><input
 						type="text" name="userName" /></td>
 				</tr>
@@ -28,7 +47,7 @@
 				</tr>
 			</form>
 		</table>
-	</div>
+	</div> -->
 
 </body>
 </html>

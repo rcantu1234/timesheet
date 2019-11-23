@@ -1,4 +1,4 @@
-package com.skillstorm.data;
+package com.skillstorm.data.model;
 
 public class Student {
 	private int id;

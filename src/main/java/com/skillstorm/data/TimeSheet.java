@@ -1,5 +1,6 @@
 package com.skillstorm.data;
 
+
 public class TimeSheet {
 	private int timeSheetId;
 	private int monday;
@@ -9,23 +10,13 @@ public class TimeSheet {
 	private int friday;
 	private int saturday;
 	private int sunday;
+	private int totalHours;
 	private int userId;
+	
 	
 	public TimeSheet() {};
 
-	public TimeSheet(int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, int sunday) {
-		this.monday = monday;
-		this.tuesday = tuesday;
-		this.wednesday = wednesday;
-		this.thursday = thursday;
-		this.friday = friday;
-		this.saturday = saturday;
-		this.sunday = sunday;
-	}
-	
-	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, 
-			int thursday, int friday, int saturday, int sunday, int userId) {
-		this.timeSheetId = timeSheetId;
+	public TimeSheet(int monday, int tuesday, int wednesday, int thursday, int friday, int saturday, int sunday, int userId) {
 		this.monday = monday;
 		this.tuesday = tuesday;
 		this.wednesday = wednesday;
@@ -36,8 +27,21 @@ public class TimeSheet {
 		this.userId = userId;
 	}
 	
+//	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, 
+//			int thursday, int friday, int saturday, int sunday, int userId) {
+//		this.timeSheetId = timeSheetId;
+//		this.monday = monday;
+//		this.tuesday = tuesday;
+//		this.wednesday = wednesday;
+//		this.thursday = thursday;
+//		this.friday = friday;
+//		this.saturday = saturday;
+//		this.sunday = sunday;
+//		this.userId = userId;
+//	}
+	
 	public TimeSheet(int monday, int tuesday, int wednesday, 
-			int thursday, int friday, int saturday, int sunday, int userId) {
+			int thursday, int friday, int saturday, int sunday, int totalHours, int userId) {
 		this.monday = monday;
 		this.tuesday = tuesday;
 		this.wednesday = wednesday;
@@ -45,6 +49,7 @@ public class TimeSheet {
 		this.friday = friday;
 		this.saturday = saturday;
 		this.sunday = sunday;
+		this.totalHours = totalHours;
 		this.userId = userId;
 	}
 
@@ -120,10 +125,18 @@ public class TimeSheet {
 		this.userId = userId;
 	}
 
+	public int getTotalHours() {
+		return totalHours;
+	}
+
+	public void setTotalHours(int totalHours) {
+		this.totalHours = totalHours;
+	}
+
 	@Override
 	public String toString() {
 		return "TimeSheet [timeSheetId=" + timeSheetId + ", monday=" + monday + ", tuesday=" + tuesday + ", wednesday="
 				+ wednesday + ", thursday=" + thursday + ", friday=" + friday + ", saturday=" + saturday + ", sunday="
-				+ sunday + ", userId=" + userId + "]\n";
+				+ sunday + ", totalHours=" + totalHours + ", userId=" + userId + "]";
 	}
 }
