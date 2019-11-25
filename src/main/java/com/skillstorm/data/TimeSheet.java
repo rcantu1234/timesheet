@@ -1,6 +1,5 @@
 package com.skillstorm.data;
 
-
 public class TimeSheet {
 	private int timeSheetId;
 	private int monday;
@@ -27,18 +26,19 @@ public class TimeSheet {
 		this.userId = userId;
 	}
 	
-//	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, 
-//			int thursday, int friday, int saturday, int sunday, int userId) {
-//		this.timeSheetId = timeSheetId;
-//		this.monday = monday;
-//		this.tuesday = tuesday;
-//		this.wednesday = wednesday;
-//		this.thursday = thursday;
-//		this.friday = friday;
-//		this.saturday = saturday;
-//		this.sunday = sunday;
-//		this.userId = userId;
-//	}
+	public TimeSheet(int timeSheetId, int monday, int tuesday, int wednesday, 
+			int thursday, int friday, int saturday, int sunday, int totalHours, int userId) {
+		this.timeSheetId = timeSheetId;
+		this.monday = monday;
+		this.tuesday = tuesday;
+		this.wednesday = wednesday;
+		this.thursday = thursday;
+		this.friday = friday;
+		this.saturday = saturday;
+		this.sunday = sunday;
+		this.totalHours = totalHours;
+		this.userId = userId;
+	}
 	
 	public TimeSheet(int monday, int tuesday, int wednesday, 
 			int thursday, int friday, int saturday, int sunday, int totalHours, int userId) {

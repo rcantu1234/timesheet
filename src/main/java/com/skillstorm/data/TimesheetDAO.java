@@ -41,7 +41,7 @@ public class TimesheetDAO {
 
 			while (result.next()) {
 				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
-						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9));
+						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9), result.getInt(10));
 				listTimeSheets.add(timeSheets);
 			}
 		} catch (SQLException e) {
@@ -178,52 +178,6 @@ public class TimesheetDAO {
 		return timesheet;
 	}
 
-//	public TimeSheet createTimeSheet(TimeSheet timesheet) {
-//		Connection connection = null;
-//		ResultSet keys = null;
-//		PreparedStatement ps = null;		
-//
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//		} catch (ClassNotFoundException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//
-//		try {
-//			connection = getConnection();
-//			String sql = "insert into time_sheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId)"
-//					+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
-//			
-//			System.out.println(timesheet.getMonday());
-//
-//			ps.setInt(1, timesheet.getMonday());
-//			ps.setInt(2, timesheet.getTuesday());
-//			ps.setInt(3, timesheet.getWednesday());
-//			ps.setInt(4, timesheet.getThursday());
-//			ps.setInt(5, timesheet.getFriday());
-//			ps.setInt(6, timesheet.getSaturday());
-//			ps.setInt(7, timesheet.getSunday());
-//			ps.setInt(8, timesheet.getUserId());
-//			
-//			ps.executeUpdate();
-//
-//			keys = ps.getGeneratedKeys();
-//
-//			while (keys.next()) {
-//				int timeSheetId = keys.getInt(1);
-//				timesheet.setTimeSheetId(timeSheetId);
-//			}
-//		} catch (SQLException ex) {
-//			ex.printStackTrace();
-//		} finally {
-//			close(connection, ps, keys);
-//		}
-//		return timesheet;
-//	}
-
 	public Connection getConnection() throws SQLException {
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/time_sheet", "root",
 				"password");
@@ -246,26 +200,6 @@ public class TimesheetDAO {
 		}
 	}
 
-//	public User findByUserName(String userName) {
-//		
-//	}
-//	
-//	public List<Timesheet> findTimesheetsByUser(int id) {
-//		
-//	}
-//	
-//	public Timesheet findTimesheetById(int id) {
-//		
-//	}
-//	
-//	public Timesheet save(Timesheet t) {
-//		
-//	}
-//	
-//	public Timesheet update(Timesheet t) {
-//		
-//	}
-//	
 	public void delete(int id) {
 		Connection connection = null;
 		ResultSet result = null;
@@ -298,6 +232,60 @@ public class TimesheetDAO {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public TimeSheet getTimeSheet(String timeSheetId) throws Exception {
+		Connection connection = null;
+		ResultSet result = null;
+		PreparedStatement ps = null;
+		int theTimeSheetId = Integer.parseInt(timeSheetId);
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			
+			connection = getConnection();
+			String sql = "select * from time_sheet where timeSheetId = ?";
+			
+			ps = connection.prepareStatement(sql);
+
+			ps.setInt(1, theTimeSheetId);
+
+			result = ps.executeQuery();
+			
+			if(result.next()) {
+				int monday = result.getInt("monday");
+				int tuesday = result.getInt("tuesday");
+				int wednesday = result.getInt("wednesday");
+				int thursday = result.getInt("thursday");
+				int friday = result.getInt("friday");
+				int saturday = result.getInt("saturday");
+				int sunday = result.getInt("sunday");
+				int userId = result.getInt("userId");
+				
+				time = new TimeSheet(theTimeSheetId, monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId);
+			} else {
+				throw new Exception("Could not find student id : " + timeSheetId);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// JDBC objects
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return time;
+
 	}
 
 }
