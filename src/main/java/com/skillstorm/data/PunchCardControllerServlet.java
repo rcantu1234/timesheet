@@ -74,7 +74,12 @@ public class PunchCardControllerServlet extends HttpServlet {
 				break;
 			case "DELETE":
 				try {
-					delete(req, resp);
+					try {
+						delete(req, resp);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} catch (NumberFormatException ex) {
 					System.out.println(ex);
 				}
@@ -88,7 +93,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 			System.out.println("No values coming in!!!");
 		}
 	}
-	
+
 	private void updateTimeSheet(HttpServletRequest req, HttpServletResponse resp)
 			throws SQLException, IOException, ServletException {
 		int timeSheetId = Integer.parseInt(req.getParameter("timeSheetId"));
@@ -133,17 +138,13 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 	}
 
-	private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	private void delete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		PrintWriter out = resp.getWriter();
 		String timeSheetId = req.getParameter("timeSheetId");
 
-		int timeSheet = Integer.parseInt(timeSheetId);
+		timesheetDAO.delete(timeSheetId);
 
-		timesheetDAO.delete(timeSheet);
-		
-		out.println("<html><body onload=alert(Row + timeSheetId + Deleted!)></body></html>");
-
-		resp.sendRedirect("http://localhost:8080/punchCard/view_time_sheets.html");
+		resp.sendRedirect("http://localhost:8080/punchCard/enter_time.html");
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -207,11 +208,11 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		req.setAttribute("timeSheets", timeSheets);
 
-//		RequestDispatcher dispatcher = req.getRequestDispatcher("/test.jsp");
-//		dispatcher.forward(req, resp);
-
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/time-sheets.jsp");
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/test.jsp");
 		dispatcher.forward(req, resp);
+
+//		RequestDispatcher dispatcher = req.getRequestDispatcher("/time-sheets.jsp");
+//		dispatcher.forward(req, resp);
 
 //		out.println("<!DOCTYPE html>");
 //		out.println("<html>");

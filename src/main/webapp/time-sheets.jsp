@@ -1,5 +1,5 @@
 <%@ page import="java.util.*,com.skillstorm.data.*"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
 <!DOCTYPE html>
@@ -16,11 +16,12 @@
 	src='https:maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>
 </head>
 
-<%
-	List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
-%>
 
 <body>
+
+	<%
+		List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
+	%>
 	<table class="table table-hover" border=1 CELLPADDING=0 CELLSPACING=0
 		WIDTH=50%>
 
@@ -64,7 +65,8 @@
 			<td align=center><%=list.getSunday()%></td>
 			<td align=center><%=list.getTotalHours()%></td>
 			<td align=center><%=list.getUserId()%></td>
-			<td><a href="${deleteLink}"><img src="trash_bin.png" width="25px" height="25px" alt="trash bin"></a></td>			
+			<td><a href="${deleteLink}"><img src="trash_bin.png"
+					width="25px" height="25px" alt="trash bin"></a></td>
 		</tr>
 		<%
 			}
@@ -74,7 +76,8 @@
 
 	<div style="clear: both;"></div>
 	<p>
-		<a href="http://localhost:8080/punchCard/view_time_sheets.html">Back to List</a>
+		<a href="http://localhost:8080/punchCard/view_time_sheets.html">Back
+			to List</a>
 	</p>
 </body>
 </html>

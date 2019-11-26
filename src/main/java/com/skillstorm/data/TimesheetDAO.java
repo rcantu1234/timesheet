@@ -201,7 +201,7 @@ public class TimesheetDAO {
 		}
 	}
 
-	public void delete(int id) {
+	public void delete(String id) {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement ps = null;
@@ -218,7 +218,9 @@ public class TimesheetDAO {
 			String sql = "delete from time_sheet where timeSheetId = ?";
 			ps = connection.prepareStatement(sql);
 
-			ps.setInt(1, id);
+			int timeSheetId = Integer.parseInt(id);
+
+			ps.setInt(1, timeSheetId);
 
 			ps.execute();
 		} catch (SQLException e) {
@@ -226,12 +228,7 @@ public class TimesheetDAO {
 			e.printStackTrace();
 		} finally {
 			// JDBC objects
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(connection, ps, result);
 		}
 	}
 
@@ -320,8 +317,7 @@ public class TimesheetDAO {
 			ps.setInt(11, timeSheet.getTimeSheetId());
 
 			ps.execute();
-			} 
-		finally {
+		} finally {
 			// JDBC objects
 			try {
 				connection.close();

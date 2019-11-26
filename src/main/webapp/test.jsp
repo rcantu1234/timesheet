@@ -14,11 +14,10 @@
 	src='https:maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>
 </head>
 
-<%
-	List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
-%>
-
 <body>
+	<%
+		List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
+	%>
 	<table class="table table-hover" border=1 CELLPADDING=0 CELLSPACING=0
 		WIDTH=50%>
 
@@ -42,21 +41,23 @@
 			<th>Action</th>
 		</thead>
 
-		<c:forEach var="tempTimeSheets" items="${theTimeSheets}">
-			<c:url var="tempLink" value="PunchCardControllerServlet">
-				<c:param name="command" value="LOAD" />
+		<c:forEach var="tempTimeSheets" items="<%=theTimeSheets%>">
+			<c:url var="tempLink" value="/api">
+				<c:param name="command" value="DELETE" />
 				<c:param name="timeSheetId" value="${tempTimeSheets.timeSheetId}" />
 			</c:url>
 			<tr class=success align=center>
+				<td align=center>${tempTimeSheets.timeSheetId}</td>
 				<td align=center>${tempTimeSheets.monday}</td>
-				<td align=center>${tempTimeSheets.tuesday}></td>
+				<td align=center>${tempTimeSheets.tuesday}</td>
 				<td align=center>${tempTimeSheets.wednesday}</td>
 				<td align=center>${tempTimeSheets.thursday}</td>
 				<td align=center>${tempTimeSheets.friday}</td>
 				<td align=center>${tempTimeSheets.saturday}</td>
 				<td align=center>${tempTimeSheets.sunday}</td>
-				<td align=center>${tempTimeSheets.userId}></td>
-				<td><a href="${tempLink}">Update</a></td>
+				<td align=center>${tempTimeSheets.totalHours}</td>
+				<td align=center>${tempTimeSheets.userId}</td>
+				<td><a href="${tempLink}" onclick="if(!(confirm('Are you sure you want to delete the timesheet?'))) return false">Delete</a></td>
 			</tr>
 		</c:forEach>
 	</table>
