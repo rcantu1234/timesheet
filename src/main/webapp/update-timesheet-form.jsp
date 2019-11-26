@@ -23,6 +23,8 @@
 
 </head>
 
+</head>
+
 <%
 	List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
 %>
@@ -44,10 +46,13 @@
 
 	<div style="margin-top: 70px;">
 		<div>
-			<form method="GET" action="/punchCard/api/"> 
-			<!-- <form method="GET" action="PunchCardControllerServlet"> -->
+			<!-- <form method="GET" action="/punchCard/api/"> -->
+			<form method="GET" action="PunchCardControllerServlet">
 				<input type="hidden" name="command" value="UPDATE" />
-				<input type="hidden" name="timeSheetId" value="${theTimeSheets.timeSheetId}" />
+				
+				<input
+					type="hidden" name="timeSheetId"
+					value="${theTimeSheet.timeSheetId}" />
 
 				<table class="table" border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%
 					align=center>
@@ -69,18 +74,26 @@
 					</thead>
 
 					<tr align="center" class="bg-success">
-						<td align=center><input type="text" name="monday" value="${theTimeSheets.monday}"/></td>
-						<td align=center><input type="text" name="tuesday" value="${theTimeSheets.tuesday}"/></td>
-						<td align=center><input type="text" name="wednesday" value="${theTimeSheets.wednesday}"/></td>
-						<td align=center><input type="text" name="thursday" value="${theTimeSheets.thursday}"/></td>
-						<td align=center><input type="text" name="friday" value="${theTimeSheets.friday}"/></td>
-						<td align=center><input type="text" name="saturday" value="${theTimeSheets.saturday}"/></td>
-						<td align=center><input type="text" name="sunday" value="${theTimeSheets.sunday}"/></td>
-						<td align=center><input type="text" name=userId value="${theTimeSheets.userId}"/></td>
+						<td align=center><input type="text" name="monday"
+							value="${theTimeSheet.monday}" /></td>
+						<td align=center><input type="text" name="tuesday"
+							value="${theTimeSheet.tuesday}" /></td>
+						<td align=center><input type="text" name="wednesday"
+							value="${theTimeSheet.wednesday}" /></td>
+						<td align=center><input type="text" name="thursday"
+							value="${theTimeSheet.thursday}" /></td>
+						<td align=center><input type="text" name="friday"
+							value="${theTimeSheet.friday}" /></td>
+						<td align=center><input type="text" name="saturday"
+							value="${theTimeSheet.saturday}" /></td>
+						<td align=center><input type="text" name="sunday"
+							value="${theTimeSheet.sunday}" /></td>
+						<td align=center><input type="text" name=userId
+							value="${theTimeSheet.userId}" /></td>
 					</tr>
 					<tr>
-						<td align=center colspan=9><input type=submit
-							class="save" value=Save /></td>
+						<td align=center colspan=9><input type=submit class="save"
+							value=Save /></td>
 					</tr>
 				</table>
 			</form>

@@ -57,16 +57,27 @@ public class PunchCardControllerServlet extends HttpServlet {
 					System.out.println(ex);
 				}
 				break;
+			case "UPDATE":
+				try {
+					updateTimeSheet(req, resp);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			case "LOAD":
 				try {
-					loadStudent(req, resp);
+					loadTimeSheet(req, resp);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case "DELETE":
-				delete(req, resp);
+				try {
+					delete(req, resp);
+				} catch (NumberFormatException ex) {
+					System.out.println(ex);
+				}
 				break;
 			default:
 				login(req, resp);
@@ -77,27 +88,62 @@ public class PunchCardControllerServlet extends HttpServlet {
 			System.out.println("No values coming in!!!");
 		}
 	}
+	
+	private void updateTimeSheet(HttpServletRequest req, HttpServletResponse resp)
+			throws SQLException, IOException, ServletException {
+		int timeSheetId = Integer.parseInt(req.getParameter("timeSheetId"));
 
-	private void loadStudent(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		String monday = req.getParameter("monday");
+		String tuesday = req.getParameter("tuesday");
+		String wednesday = req.getParameter("wednesday");
+		String thursday = req.getParameter("thursday");
+		String friday = req.getParameter("friday");
+		String saturday = req.getParameter("saturday");
+		String sunday = req.getParameter("sunday");
+		String userId = req.getParameter("userId");
+
+		int mon = Integer.parseInt(monday);
+		int tues = Integer.parseInt(tuesday);
+		int wed = Integer.parseInt(wednesday);
+		int thurs = Integer.parseInt(thursday);
+		int fri = Integer.parseInt(friday);
+		int sat = Integer.parseInt(saturday);
+		int sun = Integer.parseInt(sunday);
+		int uId = Integer.parseInt(userId);
+
+		int totalHours = mon + tues + wed + thurs + fri + sat + sun;
+
+		time = new TimeSheet(timeSheetId, mon, tues, wed, thurs, fri, sat, sun, totalHours, uId);
+
+		timesheetDAO.updateTimeSheet(time);
+
+		getAllTimeSheets(req, resp);
+
+	}
+
+	private void loadTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		String timeSheetId = req.getParameter("timeSheetId");
-				
+
 		TimeSheet theTimeSheet = timesheetDAO.getTimeSheet(timeSheetId);
-		
+
 		req.setAttribute("theTimeSheet", theTimeSheet);
-		
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/update-timesheet-form.jsp");
 		dispatcher.forward(req, resp);
-		
+
 	}
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		PrintWriter out = resp.getWriter();
 		String timeSheetId = req.getParameter("timeSheetId");
 
 		int timeSheet = Integer.parseInt(timeSheetId);
 
 		timesheetDAO.delete(timeSheet);
+		
+		out.println("<html><body onload=alert(Row + timeSheetId + Deleted!)></body></html>");
 
-		resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+		resp.sendRedirect("http://localhost:8080/punchCard/view_time_sheets.html");
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -145,25 +191,28 @@ public class PunchCardControllerServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
 
 	// reflects enter_time.html which returns all results after entering hours.
-	public void getAllTimeSheets(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		PrintWriter out = resp.getWriter();	
-		
+	public void getAllTimeSheets(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		PrintWriter out = resp.getWriter();
+
 		String userId = req.getParameter("userId");
-		
+
 		int uId = Integer.parseInt(userId);
-		
+
 		time.getUserId();
-		
-		List<TimeSheet> timeSheets = timesheetDAO.getTimeSheets(uId);	 
-		
-		req.setAttribute("timeSheets",  timeSheets);
-		
+
+		List<TimeSheet> timeSheets = timesheetDAO.getTimeSheets(uId);
+
+		req.setAttribute("timeSheets", timeSheets);
+
+//		RequestDispatcher dispatcher = req.getRequestDispatcher("/test.jsp");
+//		dispatcher.forward(req, resp);
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/time-sheets.jsp");
-				dispatcher.forward(req, resp);
-		
+		dispatcher.forward(req, resp);
+
 //		out.println("<!DOCTYPE html>");
 //		out.println("<html>");
 //		out.println("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'>");
@@ -219,7 +268,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 //		out.println("</html>");
 	}
 
-	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ParseException, ServletException {
+	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ParseException, ServletException {
 
 		String monday = req.getParameter("monday");
 		String tuesday = req.getParameter("tuesday");
@@ -238,7 +288,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 		int sat = Integer.parseInt(saturday);
 		int sun = Integer.parseInt(sunday);
 		int uId = Integer.parseInt(userId);
-		
+
 		int totalHours = mon + tues + wed + thurs + fri + sat + sun;
 
 		time = new TimeSheet(mon, tues, wed, thurs, fri, sat, sun, totalHours, uId);

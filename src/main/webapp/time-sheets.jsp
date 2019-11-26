@@ -1,5 +1,6 @@
 <%@ page import="java.util.*,com.skillstorm.data.*"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -46,8 +47,10 @@
 		<%
 			for (TimeSheet list : theTimeSheets) {
 		%>
-		<c:url var="tempLink" value="PunchCardControllerServlet">
-			<c:param name="command" value="LOAD" />
+
+		<!-- Link to delete the hours for the week.. -->
+		<c:url var="deleteLink" value="PunchCarControllerServlet">
+			<c:param name="command" value="DELETE" />
 			<c:param name="timeSheetId" value="${list.timeSheetId}" />
 		</c:url>
 		<tr class=success align=center>
@@ -61,7 +64,7 @@
 			<td align=center><%=list.getSunday()%></td>
 			<td align=center><%=list.getTotalHours()%></td>
 			<td align=center><%=list.getUserId()%></td>
-			<td><a href="${tempLink}">Update</a></td>
+			<td><a href="${deleteLink}"><img src="trash_bin.png" width="25px" height="25px" alt="trash bin"></a></td>			
 		</tr>
 		<%
 			}

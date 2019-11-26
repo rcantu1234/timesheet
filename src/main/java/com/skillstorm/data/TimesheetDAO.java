@@ -41,7 +41,8 @@ public class TimesheetDAO {
 
 			while (result.next()) {
 				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
-						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9), result.getInt(10));
+						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9),
+						result.getInt(10));
 				listTimeSheets.add(timeSheets);
 			}
 		} catch (SQLException e) {
@@ -130,11 +131,11 @@ public class TimesheetDAO {
 		}
 		return listUser;
 	}
-	
+
 	public TimeSheet createTimeSheet(TimeSheet timesheet) {
 		Connection connection = null;
 		ResultSet keys = null;
-		PreparedStatement ps = null;		
+		PreparedStatement ps = null;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -149,7 +150,7 @@ public class TimesheetDAO {
 					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			ps = connection.prepareStatement(sql, new String[] { "timesheet_id" });
-			
+
 			System.out.println(timesheet.getMonday());
 
 			ps.setInt(1, timesheet.getMonday());
@@ -161,7 +162,7 @@ public class TimesheetDAO {
 			ps.setInt(7, timesheet.getSunday());
 			ps.setInt(8, timesheet.getTotalHours());
 			ps.setInt(9, timesheet.getUserId());
-			
+
 			ps.executeUpdate();
 
 			keys = ps.getGeneratedKeys();
@@ -248,17 +249,17 @@ public class TimesheetDAO {
 		}
 
 		try {
-			
+
 			connection = getConnection();
 			String sql = "select * from time_sheet where timeSheetId = ?";
-			
+
 			ps = connection.prepareStatement(sql);
 
 			ps.setInt(1, theTimeSheetId);
 
 			result = ps.executeQuery();
-			
-			if(result.next()) {
+
+			if (result.next()) {
 				int monday = result.getInt("monday");
 				int tuesday = result.getInt("tuesday");
 				int wednesday = result.getInt("wednesday");
@@ -267,8 +268,8 @@ public class TimesheetDAO {
 				int saturday = result.getInt("saturday");
 				int sunday = result.getInt("sunday");
 				int userId = result.getInt("userId");
-				
-				time = new TimeSheet(theTimeSheetId, monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId);
+
+				time = new TimeSheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId);
 			} else {
 				throw new Exception("Could not find student id : " + timeSheetId);
 			}
@@ -285,6 +286,50 @@ public class TimesheetDAO {
 			}
 		}
 		return time;
+
+	}
+
+	public void updateTimeSheet(TimeSheet timeSheet) throws SQLException {
+		Connection connection = null;
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+
+			connection = getConnection();
+			String sql = "update time_sheet set monday = ?, tuesday = ?, wednesday = ?, "
+					+ "thursday = ?, friday = ?, saturday = ?, sunday = ? total_hours = ?, userId = ? where timeSheetId = ?";
+
+			ps = connection.prepareStatement(sql);
+
+			ps.setInt(1, timeSheet.getMonday());
+			ps.setInt(2, timeSheet.getTuesday());
+			ps.setInt(3, timeSheet.getWednesday());
+			ps.setInt(4, timeSheet.getThursday());
+			ps.setInt(5, timeSheet.getFriday());
+			ps.setInt(6, timeSheet.getSaturday());
+			ps.setInt(8, timeSheet.getSunday());
+			ps.setInt(9, timeSheet.getTotalHours());
+			ps.setInt(10, timeSheet.getUserId());
+			ps.setInt(11, timeSheet.getTimeSheetId());
+
+			ps.execute();
+			} 
+		finally {
+			// JDBC objects
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
