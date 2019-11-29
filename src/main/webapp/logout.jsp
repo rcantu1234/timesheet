@@ -15,10 +15,8 @@
 			<a href="http://localhost:8080/punchCard/enter_time.html">Create
 				Timesheet</a> <a
 				href="http://localhost:8080/punchCard/view_time_sheets.html">View
-				Time Sheets</a><a
-				href="http://localhost:8080/punchCard/delete_time.html">Delete
-				Time Sheets</a> <a
-				href="<a href="http://localhost:8080/punchCard/logout.jsp"></a>">Logout</a>
+				Time Sheets</a>
+				<a href="<a href="http://localhost:8080/punchCard/logout.jsp"></a>">Logout</a>
 		</div>
 	</div>
 	<%

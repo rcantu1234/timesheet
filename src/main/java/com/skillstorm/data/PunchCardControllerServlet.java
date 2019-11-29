@@ -185,10 +185,15 @@ public class PunchCardControllerServlet extends HttpServlet {
 				System.out.println(req.getSession().getAttribute("userName"));
 				resp.sendRedirect("http://localhost:8080/punchCard/home.html");
 				System.out.println(getUsers(req, resp));
-			} else {
-				credentials += "<h1>The Username and Password do not match!!!</h1>";
-				out.println(credentials);
-			}
+			} 
+//			else {
+////				credentials += "<h1>The Username and Password do not match!!!</h1>";
+////				out.println(credentials);
+//				out.println("<script>");
+//				out.println("alert('Invalid Username or Password');");
+//				out.println("</script>");
+//				login(req, resp);
+//			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

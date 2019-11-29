@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Welcome Page</title>
 </head>
 <body>
 	<div class="topnav">
@@ -13,13 +13,20 @@
 			<a href="http://localhost:8080/punchCard/enter_time.html">Create
 				Timesheet</a> <a
 				href="http://localhost:8080/punchCard/view_time_sheets.html">View
-				Time Sheets</a><a
-				href="http://localhost:8080/punchCard/delete_time.html">Delete
-				Time Sheets</a> <a href="<a href="http://localhost:8080/punchCard/logout.jsp"></a>">Logout</a>
+				Time Sheets</a>
+				<a href="http://localhost:8080/punchCard/logout.jsp">Logout</a>
 		</div>
 	</div>
 	<div>
-		<h1>You are logged in successfully</h1>
+		<h1 id="demo"></h1>
 	</div>
+	
+	<script>
+		function loginSucessfully() {
+			alert("You are logged in successfully");
+		}
+		document.getElementById("demo").innerHTML = loginSuccessfully();
+		
+	</script>
 </body>
 </html>
