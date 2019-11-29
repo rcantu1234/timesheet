@@ -22,12 +22,12 @@
 		WIDTH=50%>
 
 		<thead>
-			<th colspan=11>
+			<th colspan=12>
 				<h1 align=center>Time Sheets</h1>
 			</th>
 		</thead>
 
-		<thead align=center>
+		<thead>
 			<th>Time Sheet Id</th>
 			<th>Monday</th>
 			<th>Tuesday</th>
@@ -38,11 +38,15 @@
 			<th>Sunday</th>
 			<th>Total Hours</th>
 			<th>User Id</th>
-			<th>Action</th>
+			<th colspan=2 align="center">Action</th>
 		</thead>
 
 		<c:forEach var="tempTimeSheets" items="<%=theTimeSheets%>">
-			<c:url var="tempLink" value="/api">
+			<c:url var="updateLink" value="/api">
+				<c:param name="command" value="LOAD" />
+				<c:param name="timeSheetId" value="${tempTimeSheets.timeSheetId}" />
+			</c:url>
+			<c:url var="deleteLink" value="/api">
 				<c:param name="command" value="DELETE" />
 				<c:param name="timeSheetId" value="${tempTimeSheets.timeSheetId}" />
 			</c:url>
@@ -57,7 +61,9 @@
 				<td align=center>${tempTimeSheets.sunday}</td>
 				<td align=center>${tempTimeSheets.totalHours}</td>
 				<td align=center>${tempTimeSheets.userId}</td>
-				<td><a href="${tempLink}" onclick="if(!(confirm('Are you sure you want to delete the timesheet?'))) return false">Delete</a></td>
+				<td><a href="${updateLink}">Update</a></td> 
+				<td><a href="${deleteLink}"
+					onclick="if(!(confirm('Are you sure you want to delete the timesheet?'))) return false">Delete</a></td>
 			</tr>
 		</c:forEach>
 	</table>

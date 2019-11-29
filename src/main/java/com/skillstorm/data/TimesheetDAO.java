@@ -236,7 +236,6 @@ public class TimesheetDAO {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement ps = null;
-		int theTimeSheetId = Integer.parseInt(timeSheetId);
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -246,6 +245,7 @@ public class TimesheetDAO {
 		}
 
 		try {
+			int theTimeSheetId = Integer.parseInt(timeSheetId);
 
 			connection = getConnection();
 			String sql = "select * from time_sheet where timeSheetId = ?";
@@ -264,23 +264,20 @@ public class TimesheetDAO {
 				int friday = result.getInt("friday");
 				int saturday = result.getInt("saturday");
 				int sunday = result.getInt("sunday");
+				int totalHours = result.getInt("total_hours");
 				int userId = result.getInt("userId");
 
-				time = new TimeSheet(monday, tuesday, wednesday, thursday, friday, saturday, sunday, userId);
+				time = new TimeSheet(theTimeSheetId, monday, tuesday, wednesday, thursday, friday, saturday, sunday,
+						totalHours, userId);
 			} else {
-				throw new Exception("Could not find student id : " + timeSheetId);
+				throw new Exception("Could not find time sheet id : " + timeSheetId);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			// JDBC objects
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(connection, ps, result);
 		}
 		return time;
 
@@ -298,10 +295,14 @@ public class TimesheetDAO {
 		}
 
 		try {
-
 			connection = getConnection();
-			String sql = "update time_sheet set monday = ?, tuesday = ?, wednesday = ?, "
-					+ "thursday = ?, friday = ?, saturday = ?, sunday = ? total_hours = ?, userId = ? where timeSheetId = ?";
+//			String sql = "update time_sheet "
+//					+ "set monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ?, sunday = ?, total_hours = ?, userId = ? "
+//					+ "where timeSheetId = ?";
+			
+			String sql = "update time_sheet "
+					+ "set monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ?, sunday = ?, userId = ? "
+					+ "where timeSheetId = ?";
 
 			ps = connection.prepareStatement(sql);
 
@@ -311,20 +312,15 @@ public class TimesheetDAO {
 			ps.setInt(4, timeSheet.getThursday());
 			ps.setInt(5, timeSheet.getFriday());
 			ps.setInt(6, timeSheet.getSaturday());
-			ps.setInt(8, timeSheet.getSunday());
-			ps.setInt(9, timeSheet.getTotalHours());
-			ps.setInt(10, timeSheet.getUserId());
-			ps.setInt(11, timeSheet.getTimeSheetId());
+			ps.setInt(7, timeSheet.getSunday());
+//			ps.setInt(8, timeSheet.getTotalHours());
+			ps.setInt(8, timeSheet.getUserId());
+			ps.setInt(9, timeSheet.getTimeSheetId());
 
 			ps.execute();
 		} finally {
 			// JDBC objects
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(connection, ps, null);
 		}
 
 	}

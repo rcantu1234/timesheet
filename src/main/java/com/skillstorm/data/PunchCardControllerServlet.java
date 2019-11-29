@@ -39,7 +39,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 			switch (theCommand) {
 
 			case "HOME":
-				resp.sendRedirect("http://localhost:8080/punchCard/home.html");
+				resp.sendRedirect("http://localhost:8080/punchCard/welcome.html");
 				break;
 			case "LOGIN":
 				login(req, resp);
@@ -97,6 +97,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 	private void updateTimeSheet(HttpServletRequest req, HttpServletResponse resp)
 			throws SQLException, IOException, ServletException {
 		int timeSheetId = Integer.parseInt(req.getParameter("timeSheetId"));
+		
+		System.out.println("Inside updateTimeSheet(). Time Sheet Id is : " + timeSheetId);
 
 		String monday = req.getParameter("monday");
 		String tuesday = req.getParameter("tuesday");
@@ -118,12 +120,13 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		int totalHours = mon + tues + wed + thurs + fri + sat + sun;
 
-		time = new TimeSheet(timeSheetId, mon, tues, wed, thurs, fri, sat, sun, totalHours, uId);
+		TimeSheet time = new TimeSheet(timeSheetId, mon, tues, wed, thurs, fri, sat, sun, uId);
+		
+		time.toString();
 
 		timesheetDAO.updateTimeSheet(time);
 
 		getAllTimeSheets(req, resp);
-
 	}
 
 	private void loadTimeSheet(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -135,7 +138,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/update-timesheet-form.jsp");
 		dispatcher.forward(req, resp);
-
+		System.out.println("Inside loadTimeSheet(). Time Sheet Id is : " + theTimeSheet.toString());
 	}
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -166,7 +169,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		try {
 			connection = timesheetDAO.getConnection();
-			String sql = "select userName, password from user where userName = ? AND password = ?";
+			String sql = "select userName, password, userId from user where userName = ? AND password = ?";
 			ps = connection.prepareStatement(sql);
 
 			ps.setString(1, userName);
@@ -183,15 +186,77 @@ public class PunchCardControllerServlet extends HttpServlet {
 				resp.sendRedirect("http://localhost:8080/punchCard/home.html");
 				System.out.println(getUsers(req, resp));
 			} else {
-				credentials += "Invalid Name or Password!!!";
-				out.println("<div align=center><h1>" + credentials + "</h1></div>");
-
+				credentials += "<h1>The Username and Password do not match!!!</h1>";
+				out.println(credentials);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+////	public void viewTimeSheets(HttpServletRequest req, HttpServletResponse resp)
+////			throws IOException, ServletException {
+////		
+////		PrintWriter out = resp.getWriter();
+////		
+////		List<TimeSheet> timeSheets = timesheetDAO.getTimeSheets(2);
+////		
+////		out.println("<!DOCTYPE html>");
+////		out.println("<html>");
+////		out.println("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'>");
+////		out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>");
+////		out.println("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>");
+////
+//////		out.println("<head><style>h1{color: blue; background-color: }</style></head>");
+////		out.println("<br><br><br>");
+////		out.println("<table class='table table-hover' id=table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%>");
+////
+////		out.println("<thead>");
+////		out.println("<th colspan=11>");
+////		out.println("<h1 align=center>Time Sheets</h1>");
+////		out.println("</th>");
+////		out.println("</thead");
+////
+////		out.println("<thead align=center>");
+////		out.println("<th>Time Sheet Id</th>");
+////		out.println("<th>Monday</th>");
+////		out.println("<th>Tuesday</th>");
+////		out.println("<th>Wednesday</th>");
+////		out.println("<th>Thursday</th>");
+////		out.println("<th>Friday</th>");
+////		out.println("<th>Saturday</th>");
+////		out.println("<th>Sunday</th>");
+////		out.println("<th>Total Hours</th>");
+////		out.println("<th>User Id</th>");
+////		out.println("<th>Choose</th>");
+////		out.println("</thead>");
+////			
+////		for(TimeSheet list : timeSheets) {
+////			out.println("<tr class=success align=center> ");
+////			out.println("<td align=center>" + list.getTimeSheetId() + "</td>");
+////			out.println("<td align=center>" + list.getMonday() + "</td>");
+////			out.println("<td align=center>" + list.getTuesday() + "</td>");
+////			out.println("<td align=center>" + list.getWednesday() + "</td>");
+////			out.println("<td align=center>" + list.getThursday() + "</td>");
+////			out.println("<td align=center>" + list.getFriday() + "</td>");
+////			out.println("<td align=center>" + list.getSaturday() + "</td>");
+////			out.println("<td align=center>" + list.getSunday() + "</td>");
+////			out.println("<td align=center>" + list.getTotalHours() + "</td>");
+////			out.println("<td align=center>" + list.getUserId() + "</td>");
+////			out.println("<td><input type=button value=Delete /></td>");
+////			out.println("</tr>");
+//////			out.println("<td align=center><a href=http://localhost:8080/punchCard/enter_time.html>Edit</a></td>");
+//////			out.println("<td align=center><a href=http://localhost:8080/punchCard/delete_time.html>Delete</a></td>");
+////		}
+//
+//		out.println("<p>\n" + 
+//				"		<a href='PunchCardControllerServet'>Back to List</a>\n" + 
+//				"	</p>");
+//		out.println("</table>");
+//		out.println("</html>");
+//
+//	}
 
 	// reflects enter_time.html which returns all results after entering hours.
 	public void getAllTimeSheets(HttpServletRequest req, HttpServletResponse resp)
@@ -210,6 +275,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/test.jsp");
 		dispatcher.forward(req, resp);
+		
 
 //		RequestDispatcher dispatcher = req.getRequestDispatcher("/time-sheets.jsp");
 //		dispatcher.forward(req, resp);
@@ -347,3 +413,5 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("</html>");
 	}
 }
+
+

@@ -14,8 +14,6 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-
-
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
@@ -25,10 +23,11 @@
 
 </head>
 
-<%
+<%-- <%
 	List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
-%>
+%> --%>
 <body>
+
 
 	<div class="topnav">
 		<input type="hidden" name="command" value="HOME" />
@@ -40,14 +39,14 @@
 				href="http://localhost:8080/punchCard/view_time_sheets.html">View
 				Time Sheets</a><a
 				href="http://localhost:8080/punchCard/delete_time.html">Delete
-				Time Sheets</a> <a href="#contact">Contact</a>
+				Time Sheets</a> <a href="<a href="http://localhost:8080/punchCard/logout.jsp"></a>">Logout</a>
 		</div>
 	</div>
 
 	<div style="margin-top: 70px;">
 		<div>
 			<!-- <form method="GET" action="/punchCard/api/"> -->
-			<form method="GET" action="PunchCardControllerServlet">
+			<form method="GET" action="/punchCard/api">
 				<input type="hidden" name="command" value="UPDATE" />
 				
 				<input

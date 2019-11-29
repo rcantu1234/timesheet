@@ -39,7 +39,7 @@ public class TimeSheet {
 		this.totalHours = totalHours;
 		this.userId = userId;
 	}
-	
+
 	public TimeSheet(int monday, int tuesday, int wednesday, 
 			int thursday, int friday, int saturday, int sunday, int totalHours, int userId) {
 		this.monday = monday;
