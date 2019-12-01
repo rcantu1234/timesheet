@@ -18,8 +18,9 @@
 	<%
 		List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
 	%>
-	<table class="table table-hover" align=center border=1 CELLPADDING=0 CELLSPACING=0
+	<table class="table table-hover" border=1 CELLPADDING=0 CELLSPACING=0
 		WIDTH=50%>
+		<input type="hidden" name="command" value="HOME" />
 
 		<thead>
 			<th colspan=12>
@@ -38,18 +39,14 @@
 			<th>Sunday</th>
 			<th>Total Hours</th>
 			<th>User Id</th>
-			<th colspan=2 align="center">Action</th>
 		</thead>
 
 		<c:forEach var="tempTimeSheets" items="<%=theTimeSheets%>">
 			<c:url var="updateLink" value="/api">
-				<c:param name="command" value="LOAD" />
+				<c:param name="command" value="HOME" />
 				<c:param name="timeSheetId" value="${tempTimeSheets.timeSheetId}" />
 			</c:url>
-			<c:url var="deleteLink" value="/api">
-				<c:param name="command" value="DELETE" />
-				<c:param name="timeSheetId" value="${tempTimeSheets.timeSheetId}" />
-			</c:url>
+
 			<tr class=success align=center>
 				<td align=center>${tempTimeSheets.timeSheetId}</td>
 				<td align=center>${tempTimeSheets.monday}</td>
@@ -61,17 +58,10 @@
 				<td align=center>${tempTimeSheets.sunday}</td>
 				<td align=center>${tempTimeSheets.totalHours}</td>
 				<td align=center>${tempTimeSheets.userId}</td>
-				<td><a href="${updateLink}">Update</a></td> 
-				<td><a href="${deleteLink}"
-					onclick="if(!(confirm('Are you sure you want to delete the timesheet?'))) return false">Delete</a></td>
 			</tr>
 		</c:forEach>
 	</table>
 
 	<div style="clear: both;"></div>
-	<p>
-		<a href="http://localhost:8080/punchCard/view_time_sheets.html">Back
-			to List</a>
-	</p>
 </body>
 </html>

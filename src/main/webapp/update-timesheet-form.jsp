@@ -23,9 +23,6 @@
 
 </head>
 
-<%-- <%
-	List<TimeSheet> theTimeSheets = (List<TimeSheet>) request.getAttribute("timeSheets");
-%> --%>
 <body>
 
 
@@ -33,13 +30,13 @@
 		<input type="hidden" name="command" value="HOME" />
 		<div class="topnav">
 			<input type="hidden" name="command" value="HOME" /> <a
-				class="active" href="http://localhost:8080/punchCard/home.html">Home</a>
+				class="active" href="http://localhost:8080/punchCard/home.jsp">Home</a>
 			<a href="http://localhost:8080/punchCard/enter_time.html">Create
 				Time Sheet</a> <a
 				href="http://localhost:8080/punchCard/view_time_sheets.html">View
-				Time Sheets</a><a
-				href="http://localhost:8080/punchCard/delete_time.html"></a>
-				<a href="http://localhost:8080/punchCard/logout.jsp"></a>">Logout</a>
+				Time Sheets</a>
+				<!-- <a href="http://localhost:8080/punchCard/delete_time.html"></a> -->
+				<a href="http://localhost:8080/punchCard/logout.jsp">Logout</a>
 		</div>
 	</div>
 

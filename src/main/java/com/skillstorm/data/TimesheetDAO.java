@@ -18,6 +18,42 @@ public class TimesheetDAO {
 
 	public TimesheetDAO() {
 	};
+	
+	public List<TimeSheet> viewTimeSheets() {
+		List<TimeSheet> listTimeSheets = new LinkedList<>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		TimeSheet timeSheets = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			connection = getConnection();
+			String sql = "select * from time_sheet";
+			statement = connection.createStatement();
+			result = statement.executeQuery(sql);
+
+			while (result.next()) {
+				timeSheets = new TimeSheet(result.getInt(1), result.getInt(2), result.getInt(3), result.getInt(4),
+						result.getInt(5), result.getInt(6), result.getInt(7), result.getInt(8), result.getInt(9),
+						result.getInt(10));
+				listTimeSheets.add(timeSheets);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// JDBC objects
+			close(connection, statement, result);
+		}
+		return listTimeSheets;
+	}
 
 	public List<TimeSheet> getTimeSheets(int userId) {
 		List<TimeSheet> listTimeSheets = new LinkedList<>();
@@ -296,10 +332,7 @@ public class TimesheetDAO {
 
 		try {
 			connection = getConnection();
-//			String sql = "update time_sheet "
-//					+ "set monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ?, sunday = ?, total_hours = ?, userId = ? "
-//					+ "where timeSheetId = ?";
-			
+
 			String sql = "update time_sheet "
 					+ "set monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ?, sunday = ?, userId = ? "
 					+ "where timeSheetId = ?";
@@ -317,7 +350,7 @@ public class TimesheetDAO {
 			ps.setInt(8, timeSheet.getUserId());
 			ps.setInt(9, timeSheet.getTimeSheetId());
 
-			ps.execute();
+			ps.executeUpdate();
 		} finally {
 			// JDBC objects
 			close(connection, ps, null);
