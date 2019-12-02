@@ -148,8 +148,8 @@ public class PunchCardControllerServlet extends HttpServlet {
 		String timeSheetId = req.getParameter("timeSheetId");
 
 		timesheetDAO.delete(timeSheetId);
-
-		resp.sendRedirect("http://localhost:8080/punchCard/test.jsp");
+		
+		viewTimeSheets(req, resp);
 	}
 
 	public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -171,7 +171,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		try {
 			connection = timesheetDAO.getConnection();
-			String sql = "select userName, password, userId from user where userName = ? AND password = ?";
+			String sql = "select userName, password from user where userName = ? AND password = ?";
 			ps = connection.prepareStatement(sql);
 
 			ps.setString(1, userName);
@@ -194,14 +194,6 @@ public class PunchCardControllerServlet extends HttpServlet {
 	}
 
 	public void viewTimeSheets(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-//		List<TimeSheet> theTimeSheet = timesheetDAO.viewTimeSheets();
-//
-//		req.setAttribute("theTimeSheet", theTimeSheet);
-//
-//		RequestDispatcher dispatcher = req.getRequestDispatcher("/home.jsp");
-//		dispatcher.forward(req, resp);
-
 		PrintWriter out = resp.getWriter();
 		
 		List<TimeSheet> timeSheets = timesheetDAO.viewTimeSheets();
@@ -214,12 +206,12 @@ public class PunchCardControllerServlet extends HttpServlet {
 		out.println("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>");
 		
 		out.println("<div class=topnav>");
-		out.println("<input type=hidden name=command value=HOME />");
+		out.println("<input type=\"hidden\" name=\"command\" value=\"HOME\" />");
 		out.println("<div class=topnav>");
-		out.println("<input type=hidden name=command value=HOME /> <a class=active href=http://localhost:8080/punchCard/home.html>Home</a><a href=http://localhost:8080/punchCard/enter_time.html>CreateTime Sheet</a> <a href=http://localhost:8080/punchCard/view_time_sheets.html>ViewTime Sheets</a><a href=http://localhost:8080/punchCard/logout.jsp>Logout</a></div></div>");
+		out.println("<input type=hidden name=command value=HOME /> <a class=active href=http://localhost:8080/punchCard/home.jsp>Home</a><a href=http://localhost:8080/punchCard/enter_time.html>CreateTime Sheet</a> <a href=http://localhost:8080/punchCard/view_time_sheets.html>ViewTime Sheets</a><a href=http://localhost:8080/punchCard/logout.jsp>Logout</a></div></div>");
 
 		out.println("<head><style>h1{color: black;}</style></head>");
-		out.println("<table class='table table-hover' id=table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%>");
+		out.println("<table class='table table-hover' id=table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%>");	
 
 		out.println("<thead>");
 		out.println("<th colspan=10>");
@@ -275,63 +267,6 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/test.jsp");
 		dispatcher.forward(req, resp);
-
-//		RequestDispatcher dispatcher = req.getRequestDispatcher("/time-sheets.jsp");
-//		dispatcher.forward(req, resp);
-
-//		out.println("<!DOCTYPE html>");
-//		out.println("<html>");
-//		out.println("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'>");
-//		out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>");
-//		out.println("<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>");
-//
-////		out.println("<head><style>h1{color: blue; background-color: }</style></head>");
-//		out.println("<br><br><br>");
-//		out.println("<table class='table table-hover' id=table border=1 CELLPADDING=0 CELLSPACING=0 WIDTH=50%>");
-//
-//		out.println("<thead>");
-//		out.println("<th colspan=11>");
-//		out.println("<h1 align=center>Time Sheets</h1>");
-//		out.println("</th>");
-//		out.println("</thead");
-//
-//		out.println("<thead align=center>");
-//		out.println("<th>Time Sheet Id</th>");
-//		out.println("<th>Monday</th>");
-//		out.println("<th>Tuesday</th>");
-//		out.println("<th>Wednesday</th>");
-//		out.println("<th>Thursday</th>");
-//		out.println("<th>Friday</th>");
-//		out.println("<th>Saturday</th>");
-//		out.println("<th>Sunday</th>");
-//		out.println("<th>Total Hours</th>");
-//		out.println("<th>User Id</th>");
-//		out.println("<th>Choose</th>");
-//		out.println("</thead>");
-//			
-//		for(TimeSheet list : timeSheets) {
-//			out.println("<tr class=success align=center> ");
-//			out.println("<td align=center>" + list.getTimeSheetId() + "</td>");
-//			out.println("<td align=center>" + list.getMonday() + "</td>");
-//			out.println("<td align=center>" + list.getTuesday() + "</td>");
-//			out.println("<td align=center>" + list.getWednesday() + "</td>");
-//			out.println("<td align=center>" + list.getThursday() + "</td>");
-//			out.println("<td align=center>" + list.getFriday() + "</td>");
-//			out.println("<td align=center>" + list.getSaturday() + "</td>");
-//			out.println("<td align=center>" + list.getSunday() + "</td>");
-//			out.println("<td align=center>" + list.getTotalHours() + "</td>");
-//			out.println("<td align=center>" + list.getUserId() + "</td>");
-//			out.println("<td><input type=button value=Delete /></td>");
-//			out.println("</tr>");
-////			out.println("<td align=center><a href=http://localhost:8080/punchCard/enter_time.html>Edit</a></td>");
-////			out.println("<td align=center><a href=http://localhost:8080/punchCard/delete_time.html>Delete</a></td>");
-//		}
-//
-//		out.println("<p>\n" + 
-//				"		<a href='PunchCardControllerServet'>Back to List</a>\n" + 
-//				"	</p>");
-//		out.println("</table>");
-//		out.println("</html>");
 	}
 
 	public void addTimeSheet(HttpServletRequest req, HttpServletResponse resp)

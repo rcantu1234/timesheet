@@ -44,7 +44,7 @@
 		<input type="hidden" name="command" value="HOME" /> 
 
 		<thead>
-			<th colspan=12>
+			<th colspan=10>
 				<h1 align=center>Time Sheets</h1>
 			</th>
 		</thead>
