@@ -27,7 +27,6 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		viewTimeSheets(req, resp);
 		PrintWriter out = resp.getWriter();
 
 		String theCommand = req.getParameter("command");
@@ -38,9 +37,7 @@ public class PunchCardControllerServlet extends HttpServlet {
 
 		try {
 			switch (theCommand) {
-
 			case "HOME":
-//				resp.sendRedirect("http://localhost:8080/punchCard/welcome.html");
 				viewTimeSheets(req, resp);
 				break;
 			case "LOGIN":
